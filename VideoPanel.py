@@ -16,7 +16,7 @@ class VideoPanel(object):
 	mat=0
 
 	def __init__(self):
-		print("asdasd")
+		#print("asdasd")
 		cv2.namedWindow(self.windowName, cv2.WINDOW_AUTOSIZE)
 		cv2.moveWindow(self.windowName, self.screen.x - 1, self.screen.y - 1)
 		cv2.setWindowProperty(self.windowName, cv2.WINDOW_FULLSCREEN, cv2.WINDOW_FULLSCREEN);
