@@ -1,16 +1,15 @@
 import tkinter
-import cv2
 import PIL.Image, PIL.ImageTk
 import time
 import tkinter.font as tkFont
 import numpy as np
-
+from VideoCapture import VideoCapture
 
 class App:
-    def __init__(self, window, window_title, video_source=0):
+    def __init__(self, window, video_source=0):
         self.window = window
         self.customFont=tkFont.Font(family="Product Sans",size=14)
-        self.window.title(window_title)
+        self.window.title("ASL Translator - Sufiyaan Nadeem")
         self.window.iconbitmap("Images\\asl_logo_2.ico")#only .ico works
         self.window.configure(background="#ffffff")
         self.video_source = video_source
@@ -21,7 +20,7 @@ class App:
         
 
         # open video source (by default this will try to open the computer webcam)
-        self.vid = MyVideoCapture(self.video_source)
+        self.vid = VideoCapture(self.video_source)
         #self.windowX=self.screenWidth/2-self.vid.width/2
         #self.windowY=self.screenHeight/2-self.vid.height/2
 
@@ -65,46 +64,3 @@ class App:
         self.window.after(self.delay, self.update)
  
  
-class MyVideoCapture:
-    def __init__(self, video_source=0):
-        # Open the video source
-        self.vid = cv2.VideoCapture(video_source)
-        if not self.vid.isOpened():
-            raise ValueError("Unable to open video source", video_source)
-
-        # Get video source width and height
-        self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-        self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        self.fgbg=cv2.bgsegm.createBackgroundSubtractorMOG()
-
-
-
-    def get_frame(self):
-        if self.vid.isOpened():
-            ret, frame = self.vid.read()
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            gray = cv2.GaussianBlur(gray, (21, 21), 0)
-            self.fgmask=self.fgbg.apply(gray)
-            
-            self.fgmask= cv2.cvtColor(self.fgmask, cv2.COLOR_GRAY2RGB)
-            #cv2.imshow('frame',fgmask)
-            cv2.imshow("frame",self.fgmask)
-            #frame=self.backgroundSubstractMethod1.apply(frame)
-            if ret:
-                # Return a boolean success flag and the current frame converted to BGR
-                return (ret, frame)#cv2.cvtColor(self.fgmask, cv2.COLOR_GRAY2GRAY))
-            else:
-                return (ret, None)
-        else:
-            return (ret, None)
-
-    # Release the video source when the object is destroyed
-    def __del__(self):
-        if self.vid.isOpened():
-            self.vid.release()
-
-#root = tkinter.Tk()
-
-#root.wm_title("Hello, world")
- # Create a window and pass it to the Application object
-App(tkinter.Tk(), "ASL Translator - Sufiyaan Nadeem")
