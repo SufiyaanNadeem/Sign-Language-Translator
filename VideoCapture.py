@@ -25,28 +25,20 @@ class VideoCapture:
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
-        #Type of filter than can be applied later on
-        self.fgbg=cv2.bgsegm.createBackgroundSubtractorMOG()
-
     """
     Reads the current frame, applies filters, and returns a frame
     that Tkinter can display in RGB. 
     * Currently also used to display filter results as I'm working towards background subtraction
+
+    :return current frame in RGB
     """
     def get_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            gray = cv2.GaussianBlur(gray, (21, 21), 0)
-            self.fgmask=self.fgbg.apply(gray)
-            
-            self.fgmask= cv2.cvtColor(self.fgmask, cv2.COLOR_GRAY2RGB)
-            #cv2.imshow('frame',fgmask)
-            cv2.imshow("frame",self.fgmask)
-            #frame=self.backgroundSubstractMethod1.apply(frame)
+
             if ret:
-                # Return a boolean success flag and the current frame converted to BGR
-                return (ret, frame)#cv2.cvtColor(self.fgmask, cv2.COLOR_GRAY2GRAY))
+                # Return a boolean success flag and the current frame converted to RGB
+                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             else:
                 return (ret, None)
         else:
