@@ -1,3 +1,12 @@
+"""
+This class manages the window displayed on the user's screen.
+
+Author: Sufiyaan Nadeem
+Sources: 
+https://solarianprogrammer.com/2018/04/21/python-opencv-show-video-tkinter-window/
+http://effbot.org/tkinterbook/
+"""
+
 import tkinter
 import PIL.Image, PIL.ImageTk
 import time
@@ -5,7 +14,14 @@ import tkinter.font as tkFont
 import numpy as np
 from VideoCapture import VideoCapture
 
-class App:
+class Window:
+
+    """
+    Sets up the User Interface of the Window; including buttons, fonts, titles, etc. 
+
+    :param window The Tkinter Window
+    :param video_source The Video Source
+    """
     def __init__(self, window, video_source=0):
         self.window = window
         self.customFont=tkFont.Font(family="Product Sans",size=14)
@@ -16,9 +32,7 @@ class App:
 
         self.screenHeight=self.window.winfo_screenheight()
         self.screenWidth=self.window.winfo_screenwidth()
-
-        
-
+     
         # open video source (by default this will try to open the computer webcam)
         self.vid = VideoCapture(self.video_source)
         #self.windowX=self.screenWidth/2-self.vid.width/2
@@ -45,7 +59,10 @@ class App:
         self.update()
 
         self.window.mainloop()
- 
+
+    """
+    Saves the current frame as an image
+    """
     def snapshot(self):
         # Get a frame from the video source
          ret, frame = self.vid.get_frame()
@@ -53,6 +70,9 @@ class App:
          if ret:
              cv2.imwrite("frame-" + time.strftime("%d-%m-%Y-%H-%M-%S") + ".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
  
+    """
+    Displays the current frame in the window 
+    """
     def update(self):
         # Get a frame from the video source
         ret, frame = self.vid.get_frame()
