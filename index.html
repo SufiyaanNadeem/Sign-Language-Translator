@@ -1,48 +1,107 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <!-- Load TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"></script>
-    <!-- Load MobileNet -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.1.1"></script>
-    <!-- Load KNN Classifier -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@latest"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>American Sign Language Translator</title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans:300,400,500" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="dist/build.js"></script>
+
 </head>
 
 <body>
-    <img id='class0' src='/images/class0.jpg ' />
-    <img id='class1' src='/images/class1.jpg ' />
-    <img id='test' src='/images/test.jpg ' />
+  <!--
+  <!-- The Modal
+  <div id="launchModal" class="modal">
+    <!-- Modal content 
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="close-modal">&times;</span>
+        <h2>Hey there!</h2>
+      </div>
+      <div class="modal-body">
+        <p>This project is an experiment that uses Tensorflow.js and your webcam to make Amazon Echo respond to sign language.
+          It began with a simple question:</p>
+        <p>
+          <b>
+            <em>"If voice is the future of computing what about those who cannot hear or speak?"</em>
+          </b>
+        </p>
+        <p>You can find the code for this demo on
+          <a href="https://github.com/shekit/alexa-sign-language-translator" target="_blank">github</a> or watch a
+          <a href="https://www.youtube.com/watch?v=kS53y6GWm0w" target="_blank">video</a> of it in action.</p>
+        <p style="font-size:12px;">
+          <em>Note: This demo runs entirely in your browser without any data sent to any server</em>
+        </p>
+      </div>
+    </div>
+  </div>-->
+
+
+  <div id="status">
+    <p id="status-text">Status: Not Ready</p>
+  </div>
+  <video id="video" src='' muted autoplay playsinline></video>
+  <div class="split-left">
+    <div class="centered">
+      <h1 id="text" class="intro-steps">Step 1: Enter Words
+        <br>
+        <span class="subtext">Add a few words below. In the next step we'll associate each word with signs from the webcam</h1>
+      <div id="training-list">
+        <div id="example-list"></div>
+        <div id="add">
+          <form id="add-word" autocomplete="off">
+            <input type="text" id="new-word" placeholder="Add Training word">
+            <br/>
+            <br/>
+            <label>
+              <input type="checkbox" id="is-terminal-word"> Is terminal word?
+            </label>
+            <br/>
+            <br/>
+            <input type="submit" value="Add Word">
+            <p>
+              <b>Terminal Word</b> - A word that appears as the last word in your query</p>
+            <p>e.g If you intend to ask "What's
+              <b>
+                <em>the weather</em>
+              </b>?" & "What's
+              <b>
+                <em>the time</em>
+              </b>?" then
+              <b>
+                <em>the weather</em>
+              </b> and
+              <b>
+                <em>the time</em>
+              </b> are terminal words whereas
+              <b>
+                <em>what's</em>
+              </b> is not</p>
+          </form>
+        </div>
+        <p id="count">Training: 2 words</p>
+        <div id="action-btn"></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="split-right">
+    <div class="centered">
+      <div id="loader"></div>
+      <h1>
+        <span id="answerText"></span>
+        <span id="interimText"></span>
+      </h1>
+    </div>
+  </div>
+
+
+
+
 </body>
-<!-- Place your code in the script tag below. You can also use an external .js file -->
-<script>
-
-    const init = async function () {
-        // Create the classifier.
-        const classifier = knnClassifier.create();
-
-        // Load mobilenet.
-        const mobilenetModule = await mobilenet.load();
-
-        // Add MobileNet activations to the model repeatedly for all classes.
-        const img0 = tf.fromPixels(document.getElementById('class0'));
-        const logits0 = mobilenetModule.infer(img0, 'conv_preds');
-        classifier.addExample(logits0, 0);
-
-        const img1 = tf.fromPixels(document.getElementById('class1'));
-        const logits1 = mobilenetModule.infer(img1, 'conv_preds');
-        classifier.addExample(logits1, 1);
-
-        // Make a prediction.
-        const x = tf.fromPixels(document.getElementById('test'));
-        const xlogits = mobilenetModule.infer(x, 'conv_preds');
-        console.log('Predictions:');
-        const result = await classifier.predictClass(xlogits);
-        console.log(result);
-    }
-
-    init();
-
-</script>
 
 </html>
