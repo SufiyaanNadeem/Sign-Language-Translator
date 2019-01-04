@@ -29,18 +29,10 @@ body::-webkit-scrollbar-thumb:hover {
   -moz-transform: rotateY(180deg);
   /* Firefox */
   background-color: black;
-  height: 300px;
-  width: 400px;
-}
-
-#videoHolder {
-  display: inline-block;
-  /* Firefox */
-  background-color: black;
   border: 8px solid black;
-  height: 310px;
-  width: 600px;
   border-radius: 5px;
+  height: 300px;
+  width: 600px;
 }
 
 #status {
@@ -64,7 +56,7 @@ body::-webkit-scrollbar-thumb:hover {
   height: 400px;
   display: inline-block;
   z-index: 1;
-  margin-top: 170px;
+  margin-top: 200px;
   left: 50%;
   text-align: center;
   border-bottom-left-radius: 10px;
@@ -209,11 +201,9 @@ button {
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding: 10px;
-  display: none;
 }
 
 .train-new {
-  display: none;
   float: left;
   width: 315px;
   height: 225px;
@@ -225,11 +215,6 @@ button {
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding: 10px;
-}
-
-#initialTraining {
-  margin-top: 0px;
-  padding-bottom: 10px;
 }
 
 h5 {
