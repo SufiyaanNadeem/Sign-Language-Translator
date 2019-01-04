@@ -58,6 +58,7 @@ var Main = function () {
 
     // Initiate variables
     this.infoTexts = [];
+    this.checkMarks = [];
     this.training = -1; // -1 when no class is being trained
     this.videoPlaying = false;
 
@@ -77,7 +78,7 @@ var Main = function () {
 
     this.knn = null;
 
-    //this.textLine = document.getElementById("text");
+    this.textLine = document.getElementById("steps");
 
     // Get video element that will contain the webcam image
     this.video = document.getElementById('video');
@@ -183,29 +184,7 @@ var Main = function () {
     key: 'createTrainingBtn',
     value: function createTrainingBtn() {
       var _this4 = this;
-      /*
-      var div = document.getElementById("action-btn");
-      div.innerHTML = "";
-
-      var trainButton = document.createElement('button');
-      trainButton.innerText = "Train";
-      div.appendChild(trainButton);
-
-      trainButton.addEventListener('mousedown', function () {
-
-        // check if user has added atleast one terminal word
-        if (words.length > 3 && endWords.length == 1) {
-          console.log('no terminal word added');
-          alert('You have not added any terminal words.\nCurrently the only query you can make is "Alexa, hello".\n\nA terminal word is a word that will appear in the end of your query.\nIf you intend to ask "What\'s the weather" & "What\'s the time" then add "the weather" and "the time" as terminal words. "What\'s" on the other hand is not a terminal word.');
-          return;
-        }
-
-        if (words.length == 3 && endWords.length == 1) {
-          var proceed = confirm("You have not added any words.\n\nThe only query you can currently make is: 'Alexa, hello'");
-
-          if (!proceed) return;
-        }*/
-
+     
     _this4.startWebcam();
 
     console.log("ready to train");
@@ -219,11 +198,11 @@ var Main = function () {
 
     _this4.createPredictBtn();
 
-    /*_this4.textLine.innerText = "Step 2: Train";*/
+    /*_this4.textLine.innerText = "Step 2: Train";
 
     var subtext = document.createElement('span');
     subtext.innerHTML = "<br/>Time to associate signs with the words";
-    subtext.classList.add('subtext');
+    subtext.classList.add('subtext');*/
     /*_this4.textLine.appendChild(subtext);*/
       
     }
@@ -303,7 +282,7 @@ var Main = function () {
 
       // Clear List
       this.exampleListDiv.innerHTML = "";
-      
+
 
       /*
 
@@ -386,23 +365,23 @@ var Main = function () {
     });
 
     // Create clear button to remove training examples
-    var btn = document.createElement('button');
-    btn.innerText = "Clear"; //`Clear ${words[i].toUpperCase()}`
-    var trainDiv=document.getElementById('clearExamples');
-    trainDiv.appendChild(btn);
+    var btn = document.getElementById('clear_'+btnType);
+
 
     btn.addEventListener('mousedown', function () {
         console.log("clear training data for this label");
         _this7.knn.clearClass(i);
         _this7.infoTexts[i].innerText = " 0 examples";
+        _this7.checkMarks[i].src="Images\\loader.gif";
     });
 
     // Create info text
-    var infoText = document.createElement('span');
+    var infoText = document.getElementById('counter_'+btnType);
+    var checkMark = document.getElementById('checkmark_'+btnType);
     infoText.innerText = " 0 examples";
-    trainDiv.appendChild(infoText);
+    checkMark.src='Images\\loader.gif';
     this.infoTexts.push(infoText);
-      
+    this.checkMarks.push(checkMark);
     }
   }, {
     key: 'startTraining',
@@ -446,6 +425,11 @@ var Main = function () {
           for (var i = 0; i < words.length; i++) {
             if (exampleCount[i] > 0) {
               this.infoTexts[i].innerText = ' ' + exampleCount[i] + ' examples';
+              if(exampleCount[i]==30){
+                  this.checkMarks[i].src="Images//checkmark.svg";
+                  this.checkMarks[i].classList.add("animated");
+                  this.checkMarks[i].classList.add("rotateIn");
+              }
             }
           }
         }
