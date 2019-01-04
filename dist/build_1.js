@@ -59,6 +59,7 @@ var Main = function () {
     // Initiate variables
     this.infoTexts = [];
     this.checkMarks = [];
+    this.gestureCards = [];
     this.training = -1; // -1 when no class is being trained
     this.videoPlaying = false;
 
@@ -146,7 +147,7 @@ var Main = function () {
       //div.appendChild(predButton);
 
       predButton.addEventListener('mousedown', function () {
-        console.log("next step");
+        console.log("predict step");
         var exampleCount = _this3.knn.getClassExampleCount();
 
         // check if training has been done
@@ -189,21 +190,8 @@ var Main = function () {
 
     console.log("ready to train");
     _this4.createButtonList(true);
-    //_this4.addWordForm.innerHTML = '';
-    //var p = document.createElement('p');
-    //p.innerText = 'Perform the appropriate sign while holding down the ADD EXAMPLE button near each word to capture atleast 30 training examples for each word\n\n      For OTHER, capture yourself in an idle state to act as a catchall sign. e.g hands down by your side';
-    //_this4.addWordForm.appendChild(p);
 
     _this4.loadKNN();
-
-    _this4.createPredictBtn();
-
-    /*_this4.textLine.innerText = "Step 2: Train";
-
-    var subtext = document.createElement('span');
-    subtext.innerHTML = "<br/>Time to associate signs with the words";
-    subtext.classList.add('subtext');*/
-    /*_this4.textLine.appendChild(subtext);*/
       
     }
   }, {
@@ -257,39 +245,60 @@ var Main = function () {
     key: 'createButtonList',
     value: function createButtonList(showBtn) {
       // Create clear button to remove training examples
-      var btn = document.createElement('translationButton');
-
+      var _this3=this;
+      var btn = document.getElementById('nextButton');
       btn.addEventListener('mousedown', function () {
-          this.createGestureButtonList(showBtn);
+        console.log("create gesture list");
+
+        _this3.createGestureList(true);
+
       });
-      //showBtn - true: show training btns, false:show only text
 
-      this.intialBtn(0,"startButton");
-      this.intialBtn(1,"stopButton");
-
-      /*/ Clear List
-      this.exampleListDiv.innerHTML = "";
-
-      // Create training buttons and info texts    
-      for (var i = 0; i < words.length; i++) {
-        this.createButton(i, showBtn);
-      }*/
+      _this3.intialBtn(0,"startButton");
+      _this3.intialBtn(1,"stopButton");
     }
-  }, {
-    key: 'createGestureButtonList',
-    value: function createGestureButtonList(showBtn) {
-      //showBtn - true: show training btns, false:show only text
+  },{
+    key: 'createGestureList',
+    value: function createGestureList(showBtn) {
+        //showBtn - true: show training btns, false:show only text
 
-      // Clear List
-      this.exampleListDiv.innerHTML = "";
+        console.log("next step");
+        var _this3=this;
+        var exampleCount = _this3.knn.getClassExampleCount();
+
+        // check if training has been done
+        if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
+
+            // if wake word has not been trained
+            if (exampleCount[0] == 0) {
+            alert('You haven\'t added examples for the wake word');
+            return;
+            }
+
+            // if the catchall phrase other hasnt been trained
+            if (exampleCount[words.length - 1] == 0) {
+            alert('You haven\'t added examples for the catchall sign OTHER.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.\n\nThis prevents words from being erroneously detected.');
+            return;
+            }
+
+            //Delete/Move all the things we're done with
 
 
-      /*
 
-      // Create training buttons and info texts    
-      for (var i = 0; i < words.length; i++) {
-        this.createButton(i, showBtn);
-      }*/
+            //Add Cards
+            var trainedCards= document.getElementById('trained_cards');
+            trainedCards.style.display="block";
+            trainedCards.classList.add("animated");
+            trainedCards.classList.add("slideInUp");
+
+
+            console.log("start adding gestures");
+            for (var i = 0; i < words.length; i++) {
+                this.createButton(i, showBtn);
+            }
+        } else {
+            alert('You haven\'t added any examples yet.\n\nPress and hold on the "Add Example" button next to each word while performing the sign in front of the webcam.');
+        }
     }
   },{
     key: 'createButton',
@@ -378,10 +387,28 @@ var Main = function () {
     // Create info text
     var infoText = document.getElementById('counter_'+btnType);
     var checkMark = document.getElementById('checkmark_'+btnType);
+    
+    var cardArea=document.getElementById("trained_cards");
+    var gestureCard= document.createElement("div");
+    gestureCard.className="trained-gestures";
+    var gestName="";
+    if(btnType=="startButton"){
+        gestName="Start Button";
+    } else{
+        gestName="Stop Button";
+    }
+    var gestureName= document.createElement("h5");
+    gestureName.innerText=gestName;
+    //add image
+    //add accuracy
+    gestureCard.appendChild(gestureName);
+    cardArea.appendChild(gestureCard);
+
     infoText.innerText = " 0 examples";
     checkMark.src='Images\\loader.gif';
     this.infoTexts.push(infoText);
     this.checkMarks.push(checkMark);
+    this.gestureCards.push(gestureCard);
     }
   }, {
     key: 'startTraining',
@@ -425,10 +452,23 @@ var Main = function () {
           for (var i = 0; i < words.length; i++) {
             if (exampleCount[i] > 0) {
               this.infoTexts[i].innerText = ' ' + exampleCount[i] + ' examples';
+              if(exampleCount[i]==15){
+                var gestureImg=document.createElement("canvas");
+                gestureImg.className="trained_image";
+                gestureImg.getContext('2d').drawImage(video, 0, 0,400,180);
+
+                //var gestureExamples=document.createElement("h7");
+                //gestureExamples.innerText="Examples: "+exampleCount[i];
+               
+                //gestureImg.src=image;//"Images//trainedImages//trained_image_"+i+".jpg"
+                this.gestureCards[i].appendChild(gestureImg);
+                //this.gestureCards[i].appendChild(gestureExamples);
+              }
               if(exampleCount[i]==30){
                   this.checkMarks[i].src="Images//checkmark.svg";
                   this.checkMarks[i].classList.add("animated");
                   this.checkMarks[i].classList.add("rotateIn");
+
               }
             }
           }

@@ -74,7 +74,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 #training {
   width: 100%;
-  height: 400px;
+  height: 350px;
   display: inline-block;
   z-index: 1;
   margin-top: 200px;
@@ -239,7 +239,7 @@ button:active {
   font-weight: 500;
 }
 
-.translationButton {
+#nextButton {
   top: 6%;
   right: 2.5%;
   z-index: 2;
@@ -258,6 +258,9 @@ button:active {
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding: 10px;
+}
+
+#trained_cards {
   display: none;
 }
 
@@ -300,6 +303,15 @@ img.plus_sign {
 
 img.trained_image {
   height: 130px;
+  display: block;
+  padding: 3px 0px;
+  margin: 0 auto;
+  /*border: 1px solid orange;*/
+}
+
+canvas.trained_image {
+  height: 130px;
+  width: 170px;
   display: block;
   padding: 3px 0px;
   margin: 0 auto;
