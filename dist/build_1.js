@@ -41,7 +41,7 @@ var TOPK = 10;
 var predictionThreshold = 0.98;
 
 
-var words = ["awake", "other"];
+var words = ["start", "stop"];
 //var words = ["awake", "hello", "other"];
 // var words = ["alexa", "hello", "what is", "the weather", "the time",
 //"add","eggs","to the list","five","feet","in meters","tell me","a joke", "bye", "other"]
@@ -78,6 +78,7 @@ var Main = function () {
     this.exampleListDiv = document.getElementById("example-list");
 
     this.knn = null;
+    this.initialKnn = this.knn;
 
     this.textLine = document.getElementById("steps");
 
@@ -273,6 +274,9 @@ var Main = function () {
 
             this.addWordForm = document.getElementById("add-word");
             this.addWordForm.addEventListener('submit', function (e) {
+                var trainingDiv = document.getElementById("trainingDisplay");
+                trainingDiv.innerHTML = "";
+
                 e.preventDefault();
                 var word = document.getElementById("new-word").value.trim();
                 //var checkbox = document.getElementById("is-terminal-word");
@@ -290,8 +294,15 @@ var Main = function () {
                   //now set and train ready to click
                   console.log("came here once");
                   _this3.createPredictBtn();
-                  _this3.loadKNN();
-                    
+                  console.log("Knn for gestures: "+_this3.initialKnn.getClassExampleCount()[0]);
+                  //this.initialKnn=this.knn;
+                  //_this3.loadKNN();
+                  _this3.knn.numClasses += 1;
+
+                  _this3.knn.classLogitsMatrices.push(null);
+                  _this3.knn.classExampleCount.push(0);
+                  
+                  _this3.startTraining();
                   // console.log(words)
                   // console.log(endWords)
                 } else {
@@ -350,7 +361,9 @@ var Main = function () {
         infoText.style.color="black";
 
         div.appendChild(infoText);
-        //var checkMark = document.getElementById('checkmark_'+btnType);
+        var checkMark = document.createElement('img');
+        checkMark.className="checkMark";
+        div.appendChild(checkMark);
 
         var cardArea=document.getElementById("trained_cards");
         var gestureCard= document.createElement("div");
@@ -365,9 +378,9 @@ var Main = function () {
         cardArea.appendChild(gestureCard);
 
         infoText.innerText = " 0 examples";
-        //checkMark.src='Images\\loader.gif';
+        checkMark.src='Images\\loader.gif';
         this.infoTexts.push(infoText);
-        //this.checkMarks.push(checkMark);
+        this.checkMarks.push(checkMark);
         this.gestureCards.push(gestureCard);
     }
   }, {
@@ -449,6 +462,8 @@ var Main = function () {
     value: function stopTraining() {
       this.video.pause();
       cancelAnimationFrame(this.timer);
+      console.log("Knn for start: "+this.knn.getClassExampleCount()[0]);
+      this.initialKnn=this.knn;
     }
   }, {
     key: 'train',
@@ -460,7 +475,7 @@ var Main = function () {
             //console.log(this.timer);
             _this3.stopTraining();
             //btn.remove();
-            return;
+            
         });
 
       if (this.videoPlaying) {
@@ -475,7 +490,7 @@ var Main = function () {
         }
 
         var exampleCount = this.knn.getClassExampleCount();
-
+        console.log("Start examples: "+exampleCount[0]);
         if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
           for (var i = 0; i < words.length; i++) {
             if (exampleCount[i] > 0) {
@@ -491,13 +506,12 @@ var Main = function () {
                 //gestureImg.src=image;//"Images//trainedImages//trained_image_"+i+".jpg"
                 this.gestureCards[i].appendChild(gestureImg);
                 //this.gestureCards[i].appendChild(gestureExamples);
-              }/*
+              }
               if(exampleCount[i]==30){
                   this.checkMarks[i].src="Images//checkmark.svg";
                   this.checkMarks[i].classList.add("animated");
                   this.checkMarks[i].classList.add("rotateIn");
-
-              }*/
+              }
             }
           }
         }
@@ -547,13 +561,15 @@ var Main = function () {
           if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
             this.knn.predictClass(image).then(function (res) {
               for (var i = 0; i < words.length; i++) {
-
+                  console.log(words[i]+" confidence: "+res.confidences[i]);
                 // if matches & is above threshold & isnt same as prev prediction
                 // and is not the last class which is a catch all class
-                if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != _this8.previousPrediction && res.classIndex != words.length - 1) {
+                if (res.classIndex == i && res.confidences[i] > predictionThreshold){// && res.classIndex != _this8.previousPrediction && res.classIndex != 1) {
 
                   /*_this8.tts.speak(words[i]);*/
-                  console.log(words[i]);
+                  console.log("word: "+words[i]);
+
+                  
 
                   // set previous prediction so it doesnt get called again
                   _this8.previousPrediction = res.classIndex;

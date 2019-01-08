@@ -61,15 +61,17 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 #checkmark_startButton {
-  height: 30px;
   padding-bottom: 5px;
 }
 
 #checkmark_stopButton {
   display: block;
-  height: 30px;
   margin: 0 auto;
   margin-top: 5px;
+}
+
+.checkMark {
+  height: 30px;
 }
 
 #training {
