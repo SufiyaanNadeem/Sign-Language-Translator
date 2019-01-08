@@ -87,42 +87,13 @@ var Main = function () {
     //this.addWordForm = document.getElementById("add-word");
 
     this.statusText = document.getElementById("status-text");
+    this.saveThis=null;
 
     this.video.addEventListener('mousedown', function () {
       // click on video to go back to training buttons
       main.pausePredicting();
       _this2.trainingListDiv.style.display = "block";
     });
-
-    /*/ add word to training example set
-    this.addWordForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var word = document.getElementById("new-word").value.trim().toLowerCase();
-      var checkbox = document.getElementById("is-terminal-word");
-
-      if (word && !words.includes(word)) {
-        //console.log(word)
-        words.splice(words.length - 1, 0, word); //insert at penultimate index in array
-        _this2.createButtonList(false);
-        //console.log(words)
-
-
-        if (checkbox.checked) {
-          endWords.push(word);
-        }
-
-        document.getElementById("new-word").value = '';
-        checkbox.checked = false;
-
-        // console.log(words)
-        // console.log(endWords)
-      } else {
-        alert("Duplicate word or no word entered");
-      }
-
-      return;
-    });*/
-
 
     document.getElementById("status").style.display = "none";
 
@@ -141,7 +112,7 @@ var Main = function () {
 
       //var div = document.getElementById("action-btn");
       //div.innerHTML = "";
-      var predButton = document.getElementById("translationButton");
+      var predButton = document.getElementById("predictButton");
 
       //predButton.innerText = "Start Predicting >>>";
       //div.appendChild(predButton);
@@ -160,7 +131,7 @@ var Main = function () {
           }
 
           // if the catchall phrase other hasnt been trained
-          if (exampleCount[words.length - 1] == 0) {
+          if (exampleCount[1] == 0) {
             alert('You haven\'t added examples for the catchall sign OTHER.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.\n\nThis prevents words from being erroneously detected.');
             return;
           }
@@ -192,7 +163,6 @@ var Main = function () {
     _this4.createButtonList(true);
 
     _this4.loadKNN();
-      
     }
   }, {
     key: 'areTerminalWordsTrained',
@@ -235,7 +205,7 @@ var Main = function () {
       var _this6 = this;
 
       this.knn = new _deeplearnKnnImageClassifier.KNNImageClassifier(words.length, TOPK);
-
+      
       // Load knn model
       this.knn.load().then(function () {
         return _this6.startTraining();
@@ -256,6 +226,7 @@ var Main = function () {
 
       _this3.intialBtn(0,"startButton");
       _this3.intialBtn(1,"stopButton");
+      
     }
   },{
     key: 'createGestureList',
@@ -276,84 +247,128 @@ var Main = function () {
             }
 
             // if the catchall phrase other hasnt been trained
-            if (exampleCount[words.length - 1] == 0) {
+            if (exampleCount[1] == 0) {
             alert('You haven\'t added examples for the catchall sign OTHER.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.\n\nThis prevents words from being erroneously detected.');
             return;
             }
 
             //Delete/Move all the things we're done with
-
-
+            var initialTraining=document.getElementById('initialTraining');
+            initialTraining.style.display="none";
 
             //Add Cards
+            var startTraining=document.getElementById('train-new');
+            startTraining.style.display="block";
             var trainedCards= document.getElementById('trained_cards');
             trainedCards.style.display="block";
             trainedCards.classList.add("animated");
+            trainedCards.classList.add("slower");
             trainedCards.classList.add("slideInUp");
 
 
             console.log("start adding gestures");
-            for (var i = 0; i < words.length; i++) {
+            /*for (var i = 0; i < words.length; i++) {
                 this.createButton(i, showBtn);
-            }
+            }*/
+
+            this.addWordForm = document.getElementById("add-word");
+            this.addWordForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var word = document.getElementById("new-word").value.trim();
+                //var checkbox = document.getElementById("is-terminal-word");
+          
+                if (word && !words.includes(word)) {
+                  //console.log(word)
+                  words.push(word); //insert at penultimate index in array
+                  this.numClasses+=1;
+                  console.log("INDEX: "+ words.indexOf(word));
+                  _this3.createButton(words.indexOf(word));
+                  //console.log(words)
+          
+          
+                  document.getElementById("new-word").value = '';
+                  //now set and train ready to click
+                  console.log("came here once");
+                  _this3.createPredictBtn();
+                  _this3.loadKNN();
+                    
+                  // console.log(words)
+                  // console.log(endWords)
+                } else {
+                  alert("Duplicate word or no word entered");
+                }
+          
+                return;
+              });
+
+
+
         } else {
             alert('You haven\'t added any examples yet.\n\nPress and hold on the "Add Example" button next to each word while performing the sign in front of the webcam.');
         }
     }
   },{
     key: 'createButton',
-    value: function createButton(i, showBtn) {
-      var _this7 = this;
+    value: function createButton(i) {//i is the index of the new word
+        var _this7 = this;
 
-      var div = document.createElement('div');
-      this.exampleListDiv.appendChild(div);
-      div.style.marginBottom = '10px';
+        var div = document.getElementById("trainingDisplay");
 
-      // Create Word Text
-      var wordText = document.createElement('span');
+        // Create Word Text
+        var trainBtn = document.createElement('button');
+        trainBtn.className="trainBtn";
+        
+        var clearBtn = document.createElement('button');
+        clearBtn.className="clearButton";
 
-      if (i == 0 && !showBtn) {
-        wordText.innerText = words[i].toUpperCase() + " (wake word) ";
-      } else if (i == words.length - 1 && !showBtn) {
-        wordText.innerText = words[i].toUpperCase() + " (catchall sign) ";
-      } else {
-        wordText.innerText = words[i].toUpperCase() + " ";
-        wordText.style.fontWeight = "bold";
-      }
-
-      div.appendChild(wordText);
-
-      if (showBtn) {
         // Create training button
-        var button = document.createElement('button');
-        button.innerText = "Add Example"; //"Train " + words[i].toUpperCase()
-        div.appendChild(button);
+        trainBtn.innerText = "Train"; //"Train " + words[i].toUpperCase()
+        clearBtn.innerText = "Clear"; //`Clear ${words[i].toUpperCase()}`
+        
+        //Part of train btn div
+        div.appendChild(trainBtn);
+        div.appendChild(clearBtn);
 
         // Listen for mouse events when clicking the button
-        button.addEventListener('mousedown', function () {
-          return _this7.training = i;
+        trainBtn.addEventListener('mousedown', function () {
+            return _this7.training = i;
         });
-        button.addEventListener('mouseup', function () {
-          return _this7.training = -1;
+        trainBtn.addEventListener('mouseup', function () {
+            return _this7.training = -1;
         });
 
-        // Create clear button to emove training examples
-        var btn = document.createElement('button');
-        btn.innerText = "Clear"; //`Clear ${words[i].toUpperCase()}`
-        div.appendChild(btn);
-
-        btn.addEventListener('mousedown', function () {
-          console.log("clear training data for this label");
-          _this7.knn.clearClass(i);
-          _this7.infoTexts[i].innerText = " 0 examples";
+    
+        clearBtn.addEventListener('mousedown', function () {
+            console.log("clear training data for this label");
+            _this7.knn.clearClass(i);
+            _this7.infoTexts[i].innerText = " 0 examples";
+            //clear canvas
         });
 
         // Create info text
-        var infoText = document.createElement('span');
-        infoText.innerText = " 0 examples";
+        var infoText = document.createElement('h3');
+        infoText.style.color="black";
+
         div.appendChild(infoText);
+        //var checkMark = document.getElementById('checkmark_'+btnType);
+
+        var cardArea=document.getElementById("trained_cards");
+        var gestureCard= document.createElement("div");
+        gestureCard.className="trained-gestures";
+        var gestName=words[i];
+        
+        var gestureName= document.createElement("h5");
+        gestureName.innerText=gestName;
+        //add image
+        //add accuracy
+        gestureCard.appendChild(gestureName);
+        cardArea.appendChild(gestureCard);
+
+        infoText.innerText = " 0 examples";
+        //checkMark.src='Images\\loader.gif';
         this.infoTexts.push(infoText);
-      }
+        //this.checkMarks.push(checkMark);
+        this.gestureCards.push(gestureCard);
     }
   }, {
     key: 'intialBtn',
@@ -425,6 +440,8 @@ var Main = function () {
           console.log("Autoplay prevented");
         });
       }
+
+      //Below is what calls the train
       this.timer = requestAnimationFrame(this.train.bind(this));
     }
   }, {
@@ -436,10 +453,21 @@ var Main = function () {
   }, {
     key: 'train',
     value: function train() {
+        var _this3=this;
+        var btn = document.getElementById('nextButton');
+        btn.addEventListener('mousedown', function () {
+            // stop training
+            //console.log(this.timer);
+            _this3.stopTraining();
+            //btn.remove();
+            return;
+        });
+
       if (this.videoPlaying) {
+        console.log(this.training);
+
         // Get image data from video element
         var image = dl.fromPixels(this.video);
-
         // Train class if one of the buttons is held down
         if (this.training != -1) {
           // Add current image to classifier
@@ -452,7 +480,7 @@ var Main = function () {
           for (var i = 0; i < words.length; i++) {
             if (exampleCount[i] > 0) {
               this.infoTexts[i].innerText = ' ' + exampleCount[i] + ' examples';
-              if(exampleCount[i]==15){
+              if(exampleCount[i]==3){
                 var gestureImg=document.createElement("canvas");
                 gestureImg.className="trained_image";
                 gestureImg.getContext('2d').drawImage(video, 0, 0,400,180);
@@ -463,18 +491,19 @@ var Main = function () {
                 //gestureImg.src=image;//"Images//trainedImages//trained_image_"+i+".jpg"
                 this.gestureCards[i].appendChild(gestureImg);
                 //this.gestureCards[i].appendChild(gestureExamples);
-              }
+              }/*
               if(exampleCount[i]==30){
                   this.checkMarks[i].src="Images//checkmark.svg";
                   this.checkMarks[i].classList.add("animated");
                   this.checkMarks[i].classList.add("rotateIn");
 
-              }
+              }*/
             }
           }
         }
       }
       this.timer = requestAnimationFrame(this.train.bind(this));
+
     }
   }, {
     key: 'startPredicting',

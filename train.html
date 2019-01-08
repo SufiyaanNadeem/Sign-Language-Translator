@@ -22,6 +22,9 @@
     </div>
 
     <button id="nextButton" class="animated flash delay-3s">Next</button>
+    <button id="predictButton" class="animated flash delay-3s">Predict</button>
+
+    <button id="debugButton" class="animated flash delay-3s" style="top:50%">Debug</button>
 
 
     <div id="status">
@@ -48,31 +51,30 @@
         </div>
 
 
-        <div class="train-new">
+        <div id="train-new">
             <h5>Add Gesture</h5>
             <img src="Images/plus_sign.svg" alt="Plus Sign" class="plus_sign">
             <form id="add-word" autocomplete="off">
                 <input type="text" id="new-word" placeholder="New Gesture Title">
 
-                <label>
+                <!--label>
                     <input type="checkbox" id="is-terminal-word"> End of Punctuation
-                </label>
+                </label-->
 
                 <input type="submit" id="submit-word" value="Add Word &#9658;">
 
             </form>
 
             <!--Gets us to next page-->
-            <div id="action-btn" class="trainButton"></div>
-            <div id="example-list"></div>
+            <div id="trainingDisplay" class="trainButton"></div>
+            <!--div id="example-list"></div-->
 
-            <!--button id="action-btn" class="trainButton animated flash delay-3s">Train</button>
--->
+            <!--button id="action-btn" class="trainButton animated flash delay-3s">Train</button>-->
         </div>
 
     </div>
     <div id="trained_cards">
-        <div class="trained-gestures">
+        <!--div class="trained-gestures">
             <h5>Gesture Name</h5>
             <img src="Images/trained_image_1.jpg" alt="Plus Sign" class="trained_image">
             <h7>Accuracy: 100%</h7>
@@ -116,7 +118,7 @@
             <h5>Gesture Name</h5>
             <img src="Images/trained_image_1.jpg" alt="Plus Sign" class="trained_image">
             <h7>Accuracy: 100%</h7>
-        </div>
+        </div-->
     </div>
 
 </body>
