@@ -1,0 +1,17 @@
+Priority of things to do before Beta:
+- clean up
+- bug fixes on button clicks
+- comment
+- add sentence creation on prediction page
+- add spell check on predicting page
+- create back button to go back to training
+- change status style
+
+Priority of things to do for Alpha:
+- click card to train again
+- add video chat
+- presentation
+- fix memory issues with WebGl Context Loss
+- colours of text
+
+
