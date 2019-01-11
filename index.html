@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="Images/asl_logo.ico" />
     <title>ASL Translator | Sufiyaan</title>
     <link href="https://fonts.googleapis.com/css?family=Google+Sans:100,300,400,500" rel="stylesheet">
@@ -16,7 +15,6 @@
     <div id="welcomeContainer" class="animated">
         <div id="welcomeScreen">
             <h1>Welcome to ASL Translator</h1>
-
             <h3 class="animated fadeInUp delay-2s">Sufiyaan Nadeem</h3>
         </div>
         <button class="animated flash delay-3s" id="proceedButton">Proceed</button>
@@ -24,21 +22,15 @@
 
     <div id="trainingTitle">
         <h1 id="stage">Train Gestures</h1>
-        <h3 id="steps">Hold your start gesture while pressing "Start Gesture" to train about 30 examples. Then, repeat
-            the process with Stop.
-        </h3>
+        <h3 id="steps">Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.</h3>
     </div>
 
     <button id="nextButton" class="animated flash delay-3s">Next</button>
     <button id="predictButton" class="animated flash slideInRight faster">Predict</button>
 
-
-
     <div id="status">
         <p id="status-text">Status: Not Ready</p>
     </div>
-
-
 
     <div id="training">
         <div id="initialTraining">
@@ -51,35 +43,27 @@
             <button id="clear_stopButton" class="clearButton">Clear</button>
             <h3 id="counter_stopButton" class="counter"></h3>
             <img src="" alt="checkmark" id="checkmark_stopButton" class="checkMark">
-
         </div>
+
         <div id="videoHolder">
             <video id="video" src='' muted autoplay playsinline></video>
         </div>
 
-
         <div id="train-new">
             <h5>Add Gesture</h5>
+
             <img src="Images/plus_sign.svg" alt="Plus Sign" class="plus_sign">
+
             <form id="add-word" autocomplete="off">
                 <input type="text" id="new-word" placeholder="New Gesture Title">
-
-                <!--label>
-                    <input type="checkbox" id="is-terminal-word"> End of Punctuation
-                </label-->
-
                 <input type="submit" id="submit-word" value="Add Word &#9658;">
-
             </form>
 
-            <!--Gets us to next page-->
+            <!--Next/Predict Button-->
             <div id="trainingDisplay" class="trainButton"></div>
-            <!--div id="example-list"></div-->
-
-            <!--button id="action-btn" class="trainButton animated flash delay-3s">Train</button>-->
         </div>
         <div id="translationContainer">
-            <h3 id="translationText">Hello how are you?</h3>
+            <h3 id="translationText">Start Signing!</h3>
         </div>
 
     </div>

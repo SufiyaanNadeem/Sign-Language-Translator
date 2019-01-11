@@ -1,19 +1,20 @@
 # American-Sign-Language-Translator
-Using TensorFlow and OpenCV to translate American Sign Language in real-time. **_Prep for Beta Release_**
+Using TensorFlow to translate Sign Language in real-time. **_Beta Release_**
 
-## Installations
+## To Run
 ```
-pip install opencv-python
-pip install tensorflow
-pip install numpy
-pip install scipy
-pip install pillow
-pip install matplotlib
-pip install h5py
-pip install keras
-pip3 install https://github.com/OlafenwaMoses/ImageAI/releases/download/2.0.2/imageai-2.0.2-py3-none-any.whl
+npm install
+npm start
 ```
 
-## Demo
-To run the ASL Translator run the `Main.py` file, cd command prompt to the directory where its stored. Then type `python Main.py` and test the Alpha Version!
-
+## Planned and Prioritized Improvements for Final Release
+1. Back to Training function
+2. Click Card to Train Again function
+3. Display Cards on Prediction Page
+4. Display Accuracy on Cards
+5. Video Chat + Real-time translation
+6. Fix WebGl Context Loss
+7. Organize style.css file
+8. Fix _this numbers
+9. Cohesive Text Styling
+10. Comprehensive Commenting

@@ -80,8 +80,7 @@
             if (!(instance instanceof Constructor)) {
                 throw new TypeError("Cannot call a class as a function");
             }
-        } // Launch in kiosk mode
-        // /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --kiosk --app=http://localhost:9966
+        }
 
 
 
@@ -109,13 +108,9 @@
 
 
         var words = ["start", "stop"];
-        //var words = ["awake", "hello", "other"];
-        // var words = ["alexa", "hello", "what is", "the weather", "the time",
-        //"add","eggs","to the list","five","feet","in meters","tell me","a joke", "bye", "other"]
-
 
         // words from above array which act as terminal words in a sentence
-        var endWords = [""];
+        var endWords = ["stop"];
 
         var Main = function () {
             function Main() {
@@ -141,8 +136,8 @@
                 this.fpsInterval = 1000 / this.fps;
                 this.elapsed = 0;
 
-                this.trainingListDiv = document.getElementById("training-list");
-                this.exampleListDiv = document.getElementById("example-list");
+                //this.trainingListDiv = document.getElementById("training-list");
+                //this.exampleListDiv = document.getElementById("example-list");
 
                 this.knn = null;
                 this.initialKnn = this.knn;
@@ -155,8 +150,6 @@
 
                 // Get video element that will contain the webcam image
                 this.video = document.getElementById('video');
-
-                //this.addWordForm = document.getElementById("add-word");
 
                 this.statusText = document.getElementById("status-text");
                 this.saveThis = null;
@@ -179,8 +172,6 @@
 
                 this.createTrainingBtn();
 
-                //this.createButtonList(false);
-
                 // load text to speech
                 this.tts = new TextToSpeech();
             }
@@ -201,27 +192,18 @@
 
                             // if wake word has not been trained
                             if (exampleCount[0] == 0) {
-                                alert('You haven\'t added examples for the wake word');
+                                alert('You haven\'t added examples for the Start Gesture');
                                 return;
                             }
 
                             // if the catchall phrase other hasnt been trained
                             if (exampleCount[1] == 0) {
-                                alert('You haven\'t added examples for the catchall sign OTHER.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.\n\nThis prevents words from being erroneously detected.');
+                                alert('You haven\'t added examples for the Stop Gesture.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.');
                                 return;
                             }
 
-                            /*/ check if atleast one terminal word has been trained
-                            if (!_this3.areTerminalWordsTrained(exampleCount)) {
-                                alert('Add examples for atleast one terminal word.\n\nA terminal word is a word that appears at the end of a query and is necessary to trigger transcribing. e.g What is *the weather*\n\nYour terminal words are: ' + endWords);
-                                return;
-                            }*/
-
-                            /*_this3.trainingListDiv.style.display = "none";*/
-                            /*_this3.textLine.classList.remove("intro-steps");*/
-                            /*_this3.textLine.innerText = "Sign your query";*/
                             _this3.stageTitle.innerText = "Translate";
-                            _this3.textLine.innerText = "Show your \"Start\" sign to start Translating.";
+                            _this3.textLine.innerText = "Start Translating with your Start Gesture.";
 
 
                             var trainingContainer = document.getElementById("train-new");
@@ -231,9 +213,11 @@
 
                             _this3.translationContainer.style.display = "block";
 
+
                             var videoContainer = document.getElementById("videoHolder");
                             videoContainer.style.width = "650px";
                             videoContainer.style.height = "385px";
+                            videoContainer.style.marginTop = "-35px";
 
 
                             var video = document.getElementById("video");
@@ -321,12 +305,26 @@
                     var _this3 = this;
                     var btn = document.getElementById('nextButton');
                     btn.addEventListener('mousedown', function () {
-                        console.log("create gesture list");
-                        btn.style.display = "none";
-                        _this3.stageTitle.innerText = "Continue Training";
-                        _this3.textLine.innerText = "Add Gesture Name and Train.";
+                        var exampleCount = _this3.knn.getClassExampleCount();
+                        if (Math.max.apply(Math, _toConsumableArray(exampleCount)) >= 0) {
 
-                        _this3.createGestureList(true);
+                            // if wake word has not been trained
+                            if (exampleCount[0] == 0) {
+                                alert('You haven\'t added examples for the Start Gesture');
+                                return;
+                            }
+
+                            // if the catchall phrase other hasnt been trained
+                            if (exampleCount[1] == 0) {
+                                alert('You haven\'t added examples for the Stop Gesture.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.');
+                                return;
+                            }
+                            btn.style.display = "none";
+                            _this3.stageTitle.innerText = "Continue Training";
+                            _this3.textLine.innerText = "Add Gesture Name and Train.";
+
+                            _this3.createGestureList(true);
+                        }
                     });
 
                     _this3.intialBtn(0, "startButton");
@@ -409,8 +407,6 @@
                                 _this3.startTraining();
                                 _this3.createPredictBtn();
 
-                                // console.log(words)
-                                // console.log(endWords)
                             } else {
                                 alert("Duplicate word or no word entered");
                             }
@@ -578,19 +574,19 @@
                     var _this3 = this;
                     var btn = document.getElementById('nextButton');
                     btn.addEventListener('mousedown', function () {
-                        // stop training
-                        //console.log(this.timer);
-                        //if(btn.textContent=="Next"){
+                        var exampleCount = _this3.knn.getClassExampleCount();
+                        if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
+                            // if wake word has not been trained
+                            if (exampleCount[0] == 0) {
+                                return;
+                            }
+                            // if the catchall phrase other hasnt been trained
+                            if (exampleCount[1] == 0) {
+                                return;
+                            }
+                            _this3.stopTraining();
+                        }
 
-                        _this3.stopTraining();
-
-                        //btn.textContent="Predict";
-                        /*//btn.remove();
-            } else if(btn.textContent=="Predict"){
-                btn.textContent="Back to Training";
-            } else if(btn.textContent=="Back to Training"){
-                console.log("fdf");
-            }*/
                     });
 
                     if (this.videoPlaying) {
@@ -616,19 +612,13 @@
                                         gestureImg.className = "trained_image";
                                         gestureImg.getContext('2d').drawImage(video, 0, 0, 400, 180);
 
-                                        //var gestureExamples=document.createElement("h7");
-                                        //gestureExamples.innerText="Examples: "+exampleCount[i];
-
-                                        //gestureImg.src=image;//"Images//trainedImages//trained_image_"+i+".jpg"
                                         this.gestureCards[i].appendChild(gestureImg);
-                                        //this.gestureCards[i].replaceChild(gestureImg,  this.gestureCards[i].childNodes[1]);
-
-                                        //this.gestureCards[i].appendChild(gestureExamples);
                                     }
                                     if (exampleCount[i] == 30) {
                                         this.checkMarks[i].src = "Images//checkmark.svg";
                                         this.checkMarks[i].classList.add("animated");
                                         this.checkMarks[i].classList.add("rotateIn");
+
                                     }
                                 }
                             }
@@ -645,8 +635,7 @@
                         this.stopTraining();
                     }
 
-                    document.getElementById("status").style.background = "deepskyblue";
-                    this.setStatusText("Status: Ready!");
+                    this.setStatusText("Status: Ready to Predict!");
 
                     this.video.play();
 
@@ -682,7 +671,7 @@
                                         console.log(words[i] + " confidence: " + res.confidences[i]);
                                         // if matches & is above threshold & isnt same as prev prediction
                                         // and is not the last class which is a catch all class
-                                        if (res.classIndex == i && res.confidences[i] > predictionThreshold) { // && res.classIndex != _this8.previousPrediction && res.classIndex != 1) {
+                                        if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != _this8.previousPrediction) { //  && res.classIndex != 1) {
 
                                             _this8.tts.speak(words[i]);
                                             console.log("word: " + words[i]);
@@ -725,8 +714,8 @@
                 this.rate = 0.9;
 
                 this.textLine = document.getElementById("text");
-                this.ansText = document.getElementById("answerText");
-                this.loader = document.getElementById("loader");
+                //this.ansText = document.getElementById("answerText");
+                //this.loader = document.getElementById("loader");
 
                 this.translationContainer = document.getElementById("translationContainer");
                 this.translationText = document.getElementById("translationText");
@@ -734,7 +723,7 @@
                 this.selectedVoice = 48; // this is Google-US en. Can set voice and language of choice
 
                 this.currentPredictedWords = [];
-                this.waitTimeForQuery = 5000;
+                this.waitTimeForQuery = 10000;
 
                 this.synth.onvoiceschanged = function () {
                     _this9.populateVoiceList();
@@ -760,12 +749,12 @@
                 key: 'clearPara',
                 value: function clearPara(queryDetected) {
                     this.translationText.innerText = '';
-                    this.ansText.innerText = '';
+                    //this.ansText.innerText = '';
                     if (queryDetected) {
-                        this.loader.style.display = "block";
+                        //this.loader.style.display = "block";
                     } else {
-                        this.loader.style.display = "none";
-                        this.ansText.innerText = "No query detected";
+                        //this.loader.style.display = "none";
+                        //this.ansText.innerText = "No query detected";
                         main.previousPrediction = -1;
                     }
                     this.currentPredictedWords = [];
@@ -793,12 +782,6 @@
                         return;
                     }
 
-                    // if(endWords.includes(word) && this.currentPredictedWords.length == 1 && (word != "hello" && word != "bye")){
-                    //   console.log("end word detected early")
-                    //   console.log(word)
-                    //   return;
-                    // }
-
                     if (this.currentPredictedWords.includes(word)) {
                         // prevent word from being detected repeatedly in phrase
                         console.log("word already been detected in current phrase");
@@ -807,18 +790,23 @@
 
                     this.currentPredictedWords.push(word);
 
-                    this.translationText.innerText += ' ' + word;
+                    if (word=="start") {
+                        this.translationText.innerText += ' ';
+                    }else if (endWords.includes(word)) {
+                        this.translationText.innerText += '.';
+                    } else {
+                        this.translationText.innerText += ' ' + word;
+                    }
 
+                    /* Might use Text to Speech in the future
                     var utterThis = new SpeechSynthesisUtterance(word);
 
                     utterThis.onend = function (evt) {
                         if (endWords.includes(word)) {
                             //if last word is one of end words start listening for transcribing
                             console.log("this was the last word");
-
                             main.setStatusText("Status: Waiting for Response");
-
-                            var stt = new SpeechToText();
+                            //var stt = new SpeechToText();
                         }
                     };
 
@@ -831,127 +819,11 @@
                     utterThis.pitch = this.pitch;
                     utterThis.rate = this.rate;
 
-                    this.synth.speak(utterThis);
+                    this.synth.speak(utterThis);*/
                 }
             }]);
 
             return TextToSpeech;
-        }();
-
-        var SpeechToText = function () {
-            function SpeechToText() {
-                var _this11 = this;
-
-                _classCallCheck(this, SpeechToText);
-
-                this.interimTextLine = document.getElementById("interimText");
-                this.translationText = document.getElementById("answerText");
-                this.loader = document.getElementById("loader");
-                this.finalTranscript = '';
-                this.recognizing = false;
-
-                this.recognition = new webkitSpeechRecognition();
-
-                this.recognition.continuous = true;
-                this.recognition.interimResults = true;
-
-                this.recognition.lang = 'en-US';
-
-                this.cutOffTime = 15000; // cut off speech to text after
-
-                this.recognition.onstart = function () {
-                    _this11.recognizing = true;
-                    console.log("started recognizing");
-                    main.setStatusText("Status: Transcribing");
-                };
-
-                this.recognition.onerror = function (evt) {
-                    console.log(evt + " recogn error");
-                };
-
-                this.recognition.onend = function () {
-                    console.log("stopped recognizing");
-                    if (_this11.finalTranscript.length == 0) {
-                        _this11.type("No response detected");
-                    }
-                    _this11.recognizing = false;
-
-                    main.setStatusText("Status: Finished Transcribing");
-                    // restart prediction after a pause
-                    setTimeout(function () {
-                        main.startPredicting();
-                    }, 1000);
-                };
-
-                this.recognition.onresult = function (event) {
-                    var interim_transcript = '';
-                    if (typeof event.results == 'undefined') {
-                        return;
-                    }
-
-                    for (var i = event.resultIndex; i < event.results.length; ++i) {
-                        if (event.results[i].isFinal) {
-                            _this11.finalTranscript += event.results[i][0].transcript;
-                        } else {
-                            interim_transcript += event.results[i][0].transcript;
-                        }
-                    }
-
-                    _this11.interimType(interim_transcript);
-                    _this11.type(_this11.finalTranscript);
-                };
-
-                setTimeout(function () {
-                    _this11.startListening();
-                }, 0);
-
-                setTimeout(function () {
-                    _this11.stopListening();
-                }, this.cutOffTime);
-            }
-
-            _createClass(SpeechToText, [{
-                key: 'startListening',
-                value: function startListening() {
-                    if (this.recognizing) {
-                        this.recognition.stop();
-                        return;
-                    }
-
-                    console.log("listening");
-
-                    main.pausePredicting();
-
-                    this.recognition.start();
-                }
-            }, {
-                key: 'stopListening',
-                value: function stopListening() {
-                    console.log("STOP LISTENING");
-                    if (this.recognizing) {
-                        console.log("stop speech to text");
-                        this.recognition.stop();
-
-                        //restart predicting
-                        main.startPredicting();
-                        return;
-                    }
-                }
-            }, {
-                key: 'interimType',
-                value: function interimType(text) {
-                    this.loader.style.display = "none";
-                    this.interimTextLine.innerText = text;
-                }
-            }, {
-                key: 'type',
-                value: function type(text) {
-                    this.loader.style.display = "none";
-                    this.translationText.innerText = text;
-                }
-            }]);
-
-            return SpeechToText;
         }();
 
         var main = null;
@@ -25814,8 +25686,6 @@
         // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
         // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
         // THE SOFTWARE.
-
-
 
         (function (global, module, define) {
 

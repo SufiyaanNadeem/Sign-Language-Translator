@@ -49,17 +49,24 @@ body::-webkit-scrollbar-thumb:hover {
 #status {
   width: 300px;
   height: 50px;
-  background: red;
+  background-color: black;
   position: absolute;
-  z-index: 30;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 7px solid black;
+  z-index: 3;
+  /* top: 10%; */
+  left: 0%;
+  /* transform: translateX(-50%); */
+  /* border: 7px solid black; */
   border-top: none;
   text-align: center;
-  border-bottom-left-radius: 10px;
+  /* border-bottom-left-radius: 10px; */
   border-bottom-right-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+#status p {
+  color: white;
+  font-weight: 500;
 }
 
 #checkmark_startButton {
@@ -97,6 +104,8 @@ body::-webkit-scrollbar-thumb:hover {
   position: absolute;
   background-color: white;
   z-index: 10;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
 }
 
 #welcomeScreen {
@@ -129,6 +138,7 @@ body::-webkit-scrollbar-thumb:hover {
   from {
     width: 0
   }
+
   to {
     width: 100%
   }
@@ -137,9 +147,12 @@ body::-webkit-scrollbar-thumb:hover {
 /* The typewriter cursor effect */
 
 @keyframes blink-caret {
-  from, to {
+
+  from,
+  to {
     border-color: transparent
   }
+
   50% {
     border-color: #4d4d4d
   }
@@ -334,6 +347,12 @@ button:active {
   display: none;
 }
 
+#translationContainer h3 {
+  font-size: 20px;
+  font-weight: 100;
+
+}
+
 h5 {
   font-size: 30px;
   /*border: 1px solid orange;*/
@@ -375,10 +394,6 @@ h7 {
   font-family: 'Product Sans';
 }
 
-#status p {
-  color: black;
-  font-weight: bold;
-}
 
 label {
   display: block;
@@ -494,7 +509,9 @@ h1 .subtext {
   margin-bottom: 30px;
 }
 
-#loader, #loader:before, #loader:after {
+#loader,
+#loader:before,
+#loader:after {
   background: #000000;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
@@ -516,7 +533,8 @@ h1 .subtext {
   display: none;
 }
 
-#loader:before, #loader:after {
+#loader:before,
+#loader:after {
   position: absolute;
   top: 0;
   content: '';
@@ -533,10 +551,14 @@ h1 .subtext {
 }
 
 @-webkit-keyframes load1 {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     box-shadow: 0 0;
     height: 4em;
   }
+
   40% {
     box-shadow: 0 -2em;
     height: 5em;
@@ -544,10 +566,14 @@ h1 .subtext {
 }
 
 @keyframes load1 {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     box-shadow: 0 0;
     height: 4em;
   }
+
   40% {
     box-shadow: 0 -2em;
     height: 5em;
@@ -622,6 +648,7 @@ h1 .subtext {
     top: -300px;
     opacity: 0
   }
+
   to {
     top: 10%;
     opacity: 1
@@ -637,7 +664,8 @@ h1 .subtext {
   font-weight: bold;
 }
 
-#close-modal:hover, #close-modal:focus {
+#close-modal:hover,
+#close-modal:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
