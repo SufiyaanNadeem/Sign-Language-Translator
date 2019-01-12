@@ -185,51 +185,72 @@
                     predButton.style.display = "block";
 
                     predButton.addEventListener('mousedown', function () {
-                        var exampleCount = _this3.knn.getClassExampleCount();
+                        if (predButton.innerText == "Translate") {
+                            var exampleCount = _this3.knn.getClassExampleCount();
 
-                        // check if training has been done
-                        if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
+                            // check if training has been done
+                            if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
 
-                            // if wake word has not been trained
-                            if (exampleCount[0] == 0) {
-                                alert('You haven\'t added examples for the Start Gesture');
-                                return;
+                                // if wake word has not been trained
+                                if (exampleCount[0] == 0) {
+                                    alert('You haven\'t added examples for the Start Gesture');
+                                    return;
+                                }
+
+                                // if the catchall phrase other hasnt been trained
+                                if (exampleCount[1] == 0) {
+                                    alert('You haven\'t added examples for the Stop Gesture.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.');
+                                    return;
+                                }
+                                predButton.innerText = "Back to Training";
+
+                                _this3.stageTitle.innerText = "Translate";
+                                _this3.textLine.innerText = "Start Translating with your Start Gesture.";
+
+
+                                var trainingContainer = document.getElementById("train-new");
+                                trainingContainer.style.display = "none";
+                                var trainedCards = document.getElementById("trained_cards");
+                                trainedCards.style.display = "none";
+
+                                _this3.translationContainer.style.display = "block";
+
+
+                                var videoContainer = document.getElementById("videoHolder");
+                                videoContainer.className = "videoContainerPredict";
+
+                                var video = document.getElementById("video");
+                                video.className = "videoPredict";
+
+
+                                console.log("sign your query");
+
+
+                                _this3.startPredicting();
+                            } else {
+                                alert('You haven\'t added any examples yet.\n\nPress and hold on the "Add Example" button next to each word while performing the sign in front of the webcam.');
                             }
+                        } else{
+                            main.pausePredicting();
+                            predButton.innerText = "Translate";
 
-                            // if the catchall phrase other hasnt been trained
-                            if (exampleCount[1] == 0) {
-                                alert('You haven\'t added examples for the Stop Gesture.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.');
-                                return;
-                            }
-
-                            _this3.stageTitle.innerText = "Translate";
-                            _this3.textLine.innerText = "Start Translating with your Start Gesture.";
+                            _this3.stageTitle.innerText = "Train Gestures";
+                            _this3.textLine.innerText = "Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.";
 
 
                             var trainingContainer = document.getElementById("train-new");
-                            trainingContainer.style.display = "none";
+                            trainingContainer.style.display = "block";
                             var trainedCards = document.getElementById("trained_cards");
-                            trainedCards.style.display = "none";
+                            trainedCards.style.display = "block";
 
-                            _this3.translationContainer.style.display = "block";
+                            _this3.translationContainer.style.display = "none";
 
 
                             var videoContainer = document.getElementById("videoHolder");
-                            videoContainer.style.width = "650px";
-                            videoContainer.style.height = "385px";
-                            videoContainer.style.marginTop = "-35px";
-
+                            videoContainer.className = "videoContainerTrain";
 
                             var video = document.getElementById("video");
-                            video.style.width = "500px";
-                            video.style.height = "375px";
-
-                            console.log("sign your query");
-
-
-                            _this3.startPredicting();
-                        } else {
-                            alert('You haven\'t added any examples yet.\n\nPress and hold on the "Add Example" button next to each word while performing the sign in front of the webcam.');
+                            video.className = "videoTrain";                           
                         }
 
                     });
@@ -790,9 +811,9 @@
 
                     this.currentPredictedWords.push(word);
 
-                    if (word=="start") {
+                    if (word == "start") {
                         this.translationText.innerText += ' ';
-                    }else if (endWords.includes(word)) {
+                    } else if (endWords.includes(word)) {
                         this.translationText.innerText += '.';
                     } else {
                         this.translationText.innerText += ' ' + word;

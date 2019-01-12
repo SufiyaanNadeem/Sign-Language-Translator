@@ -1,3 +1,9 @@
+/*
+Style Sheet for American Sign Language Translator. This file is responsible for the aesthetics of the index.html
+
+Author: Sufiyaan Nadeem
+*/
+
 body {
   font-family: "Google Sans", "sans-serif";
   margin: 0;
@@ -29,8 +35,6 @@ body::-webkit-scrollbar-thumb:hover {
   -moz-transform: rotateY(180deg);
   /* Firefox */
   background-color: black;
-  height: 300px;
-  width: 400px;
   transition: 1s;
 }
 
@@ -38,12 +42,32 @@ body::-webkit-scrollbar-thumb:hover {
   /* Firefox */
   background-color: black;
   border: 8px solid black;
-  height: 310px;
-  width: 600px;
   display: inline-block;
   border-radius: 5px;
   vertical-align: middle;
   transition: 1s;
+}
+
+.videoContainerTrain {
+  height: 305px;
+  width: 500px;
+  margin-top: 0px;
+}
+
+.videoContainerPredict {
+  width: 650px;
+  height: 370px;
+  margin-top: -35px;
+}
+
+.videoTrain {
+  height: 300px;
+  width: 400px;
+}
+
+.videoPredict {
+  height: 370px;
+  width: 500px;
 }
 
 #status {
@@ -61,7 +85,6 @@ body::-webkit-scrollbar-thumb:hover {
   /* border-bottom-left-radius: 10px; */
   border-bottom-right-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
 }
 
 #status p {
@@ -105,7 +128,6 @@ body::-webkit-scrollbar-thumb:hover {
   background-color: white;
   z-index: 10;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
 }
 
 #welcomeScreen {
@@ -138,7 +160,6 @@ body::-webkit-scrollbar-thumb:hover {
   from {
     width: 0
   }
-
   to {
     width: 100%
   }
@@ -147,12 +168,9 @@ body::-webkit-scrollbar-thumb:hover {
 /* The typewriter cursor effect */
 
 @keyframes blink-caret {
-
-  from,
-  to {
+  from, to {
     border-color: transparent
   }
-
   50% {
     border-color: #4d4d4d
   }
@@ -350,7 +368,6 @@ button:active {
 #translationContainer h3 {
   font-size: 20px;
   font-weight: 100;
-
 }
 
 h5 {
@@ -393,7 +410,6 @@ h7 {
   font-style: italic;
   font-family: 'Product Sans';
 }
-
 
 label {
   display: block;
@@ -509,9 +525,7 @@ h1 .subtext {
   margin-bottom: 30px;
 }
 
-#loader,
-#loader:before,
-#loader:after {
+#loader, #loader:before, #loader:after {
   background: #000000;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
@@ -533,8 +547,7 @@ h1 .subtext {
   display: none;
 }
 
-#loader:before,
-#loader:after {
+#loader:before, #loader:after {
   position: absolute;
   top: 0;
   content: '';
@@ -551,14 +564,10 @@ h1 .subtext {
 }
 
 @-webkit-keyframes load1 {
-
-  0%,
-  80%,
-  100% {
+  0%, 80%, 100% {
     box-shadow: 0 0;
     height: 4em;
   }
-
   40% {
     box-shadow: 0 -2em;
     height: 5em;
@@ -566,14 +575,10 @@ h1 .subtext {
 }
 
 @keyframes load1 {
-
-  0%,
-  80%,
-  100% {
+  0%, 80%, 100% {
     box-shadow: 0 0;
     height: 4em;
   }
-
   40% {
     box-shadow: 0 -2em;
     height: 5em;
@@ -648,7 +653,6 @@ h1 .subtext {
     top: -300px;
     opacity: 0
   }
-
   to {
     top: 10%;
     opacity: 1
@@ -664,8 +668,7 @@ h1 .subtext {
   font-weight: bold;
 }
 
-#close-modal:hover,
-#close-modal:focus {
+#close-modal:hover, #close-modal:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
