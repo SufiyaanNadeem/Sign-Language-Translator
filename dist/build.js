@@ -82,6 +82,42 @@
             }
         }
 
+        function setCookie(cname, cvalue, exdays) {
+            console.log("cookie set");
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+              var c = ca[i];
+              while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+              }
+              if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+              }
+            }
+            return "";
+          }
+          /*
+          function checkCookie() {
+            var knn = getCookie("knn");
+            if (knn != "") {
+             alert("Welcome again " + "Sufiyaan");
+            } else {
+                knn = prompt("Please enter your name:", "");
+              if (knn != "" && knn != null) {
+                setCookie("knn", knn, 365);
+              }
+            }
+          }*/
+
 
 
 
@@ -136,10 +172,32 @@
                 this.fpsInterval = 1000 / this.fps;
                 this.elapsed = 0;
 
-                //this.trainingListDiv = document.getElementById("training-list");
-                //this.exampleListDiv = document.getElementById("example-list");
+                var knn = getCookie("knn");
+                if (knn != "") {
+                    alert("Welcome again " + "Sufiyaan");
+                } else {
+                    alert("nothing happened");
+                    this.knn = null;
+                    /*knn = prompt("Please enter your name:", "");
+                if (knn != "" && knn != null) {
+                    setCookie("knn", knn, 365);
+                }*/
+                }
 
-                this.knn = null;
+                var name = getCookie("name");
+                if (name != "") {
+                    alert("Welcome again " + name);
+                } else {
+                    //alert("nothing happened");
+                    this.name = null;
+                    name = prompt("Please enter your name:", "");
+                    if (name != "" && name != null) {
+                        setCookie("name", name, 365);
+                    }
+                }
+                //setCookie("name","Sufiyaan",365);
+
+                
                 this.initialKnn = this.knn;
 
                 this.stageTitle = document.getElementById("stage");
@@ -176,16 +234,19 @@
                 this.tts = new TextToSpeech();
             }
 
+            //export model
             _createClass(Main, [{
                 key: 'createPredictBtn',
                 value: function createPredictBtn() {
                     var _this3 = this;
+                    
 
                     var predButton = document.getElementById("predictButton");
                     predButton.style.display = "block";
 
                     predButton.addEventListener('mousedown', function () {
                         if (predButton.innerText == "Translate") {
+                            setCookie("knn", _this3.knn, 365);
                             var exampleCount = _this3.knn.getClassExampleCount();
 
                             // check if training has been done
@@ -230,7 +291,7 @@
                             } else {
                                 alert('You haven\'t added any examples yet.\n\nPress and hold on the "Add Example" button next to each word while performing the sign in front of the webcam.');
                             }
-                        } else{
+                        } else {
                             main.pausePredicting();
                             predButton.innerText = "Translate";
 
@@ -250,7 +311,7 @@
                             videoContainer.className = "videoContainerTrain";
 
                             var video = document.getElementById("video");
-                            video.className = "videoTrain";                           
+                            video.className = "videoTrain";
                         }
 
                     });

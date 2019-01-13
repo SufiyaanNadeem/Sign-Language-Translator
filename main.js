@@ -27,12 +27,39 @@ For more information on the updates that will be ready for Final Release please 
 To check my progress on this project, please visit: https://github.com/SufiyaanNadeem/American-Sign-Language-Translator
 Author: Sufiyaan Nadeem
 */
+// Launch in kiosk mode
+// /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --kiosk --app=http://localhost:9966
+
 
 import {
   KNNImageClassifier
 } from 'deeplearn-knn-image-classifier';
 import * as dl from 'deeplearn';
 
+
+function setCookie(cname, cvalue, exdays) {
+  console.log("cookie set");
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 
 // Webcam Image size. Must be 227. 
 const IMAGE_SIZE = 227;
@@ -41,31 +68,11 @@ const TOPK = 10;
 
 const predictionThreshold = 0.98
 
-var words = ["start", "stop"]
+var words = ["start", "stop"];
 
 // words from above array which act as terminal words in a sentence
-var endWords = ["stop"]
+var endWords = ["stop"];
 
-class LaunchModal {
-  constructor() {
-    this.modalWindow = document.getElementById('launchModal')
-
-    this.closeBtn = document.getElementById('close-modal')
-
-    this.closeBtn.addEventListener('click', (e) => {
-      this.modalWindow.style.display = "none"
-    })
-
-    window.addEventListener('click', (e) => {
-      if (e.target == this.modalWindow) {
-        this.modalWindow.style.display = "none"
-      }
-    })
-
-    this.modalWindow.style.display = "block"
-    this.modalWindow.style.zIndex = 500
-  }
-}
 
 class Main {
   constructor() {
@@ -87,7 +94,32 @@ class Main {
     this.fpsInterval = 1000 / this.fps;
     this.elapsed = 0;
 
-    this.knn = null;
+    var knn = getCookie("knn");
+    if (knn != "") {
+      alert("Welcome again " + "Sufiyaan");
+    } else {
+      alert("nothing happened");
+      this.knn = null;
+      /*knn = prompt("Please enter your name:", "");
+    if (knn != "" && knn != null) {
+        setCookie("knn", knn, 365);
+    }*/
+    }
+
+    var name = getCookie("name");
+    if (name != "") {
+      alert("Welcome again " + name);
+    } else {
+      //alert("nothing happened");
+      this.name = null;
+      name = prompt("Please enter your name:", "");
+      if (name != "" && name != null) {
+        setCookie("name", name, 365);
+      }
+    }
+    //setCookie("name","Sufiyaan",365);
+
+
     this.initialKnn = this.knn;
 
     this.stageTitle = document.getElementById("stage");
@@ -110,8 +142,9 @@ class Main {
     });
 
     this.video.addEventListener('mousedown', function () {
-      // click on video to pause predicting
+      // click on video to go back to training buttons
       main.pausePredicting();
+      //_this2.trainingListDiv.style.display = "block";
     });
 
     document.getElementById("status").style.display = "none";
@@ -119,62 +152,88 @@ class Main {
     this.createTrainingBtn();
 
     // load text to speech
-    //this.tts = new TextToSpeech();
+    this.tts = new TextToSpeech();
+
   }
 
+
+
   createPredictBtn() {
+
     var predButton = document.getElementById("predictButton");
     predButton.style.display = "block";
 
     predButton.addEventListener('mousedown', function () {
-      var exampleCount = this.knn.getClassExampleCount();
+      if (predButton.innerText == "Translate") {
+        setCookie("knn", this.knn, 365);
+        var exampleCount = this.knn.getClassExampleCount();
 
-      // check if training has been done
-      if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
+        // check if training has been done
+        if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
 
-        // if wake word has not been trained
-        if (exampleCount[0] == 0) {
-          alert('You haven\'t added examples for the Start Gesture');
-          return;
+          // if wake word has not been trained
+          if (exampleCount[0] == 0) {
+            alert('You haven\'t added examples for the Start Gesture');
+            return;
+          }
+
+          // if the catchall phrase other hasnt been trained
+          if (exampleCount[1] == 0) {
+            alert('You haven\'t added examples for the Stop Gesture.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.');
+            return;
+          }
+          predButton.innerText = "Back to Training";
+
+          this.stageTitle.innerText = "Translate";
+          this.textLine.innerText = "Start Translating with your Start Gesture.";
+
+
+          var trainingContainer = document.getElementById("train-new");
+          trainingContainer.style.display = "none";
+          var trainedCards = document.getElementById("trained_cards");
+          trainedCards.style.display = "none";
+
+          this.translationContainer.style.display = "block";
+
+
+          var videoContainer = document.getElementById("videoHolder");
+          videoContainer.className = "videoContainerPredict";
+
+          var video = document.getElementById("video");
+          video.className = "videoPredict";
+
+
+          console.log("sign your query");
+
+
+          this.startPredicting();
+        } else {
+          alert('You haven\'t added any examples yet.\n\nPress and hold on the "Add Example" button next to each word while performing the sign in front of the webcam.');
         }
+      } else {
+        main.pausePredicting();
+        predButton.innerText = "Translate";
 
-        // if the catchall phrase other hasnt been trained
-        if (exampleCount[1] == 0) {
-          alert('You haven\'t added examples for the Stop Gesture.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.');
-          return;
-        }
-
-        this.stageTitle.innerText = "Translate";
-        this.textLine.innerText = "Start Translating with your Start Gesture.";
+        this.stageTitle.innerText = "Train Gestures";
+        this.textLine.innerText = "Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.";
 
 
         var trainingContainer = document.getElementById("train-new");
-        trainingContainer.style.display = "none";
+        trainingContainer.style.display = "block";
         var trainedCards = document.getElementById("trained_cards");
-        trainedCards.style.display = "none";
+        trainedCards.style.display = "block";
 
-        this.translationContainer.style.display = "block";
+        this.translationContainer.style.display = "none";
 
 
         var videoContainer = document.getElementById("videoHolder");
-        videoContainer.style.width = "650px";
-        videoContainer.style.height = "385px";
-        videoContainer.style.marginTop = "-35px";
-
+        videoContainer.className = "videoContainerTrain";
 
         var video = document.getElementById("video");
-        video.style.width = "500px";
-        video.style.height = "375px";
-
-        console.log("sign your query");
-
-
-        this.startPredicting();
-      } else {
-        alert('You haven\'t added any examples yet.\n\nPress and hold on the "Add Example" button next to each word while performing the sign in front of the webcam.');
+        video.className = "videoTrain";
       }
 
-    });
+    })
   }
 
   createTrainingBtn() {
@@ -184,6 +243,7 @@ class Main {
     this.createButtonList(true);
 
     this.loadKNN();
+
   }
 
   areTerminalWordsTrained(exampleCount) {
@@ -202,7 +262,6 @@ class Main {
   }
 
   startWebcam() {
-
     // Setup webcam
     navigator.mediaDevices.getUserMedia({
       video: {
@@ -223,6 +282,7 @@ class Main {
     });
   }
 
+
   loadKNN() {
     this.knn = new _deeplearnKnnImageClassifier.KNNImageClassifier(words.length, TOPK);
 
@@ -231,9 +291,9 @@ class Main {
       return this.startTraining();
     });
   }
+
   createButtonList(showBtn) {
     // Create clear button to remove training examples
-
     var btn = document.getElementById('nextButton');
     btn.addEventListener('mousedown', function () {
       var exampleCount = this.knn.getClassExampleCount();
@@ -264,8 +324,9 @@ class Main {
   }
 
   createGestureList(showBtn) {
-    console.log("next step");
+    //showBtn - true: show training btns, false:show only text
 
+    console.log("next step");
     var exampleCount = this.knn.getClassExampleCount();
 
     // check if training has been done
@@ -350,6 +411,7 @@ class Main {
   }
 
   createButton(i) { //i is the index of the new word
+
     var div = document.getElementById("trainingDisplay");
 
     // Create Word Text
@@ -415,6 +477,8 @@ class Main {
   intialBtn(i, btnType) {
     // Create training button
     var button = document.getElementById(btnType);
+    //button.innerText = "Add Example"; //"Train " + words[i].toUpperCase()
+    //div.appendChild(button);
 
     // Listen for mouse events when clicking the button
     button.addEventListener('mousedown', function () {
@@ -488,7 +552,6 @@ class Main {
   }
 
   train() {
-
     var btn = document.getElementById('nextButton');
     btn.addEventListener('mousedown', function () {
       var exampleCount = this.knn.getClassExampleCount();
@@ -603,13 +666,128 @@ class Main {
 
     this.pred = requestAnimationFrame(this.predict.bind(this));
   }
+
   setStatusText(status) {
     document.getElementById("status").style.display = "block";
     this.statusText.innerText = status;
   }
+}
 
+class TextToSpeech {
+  constructor() {
+    this.synth = window.speechSynthesis;
+    this.voices = [];
+    this.pitch = 1.0;
+    this.rate = 0.9;
+
+    this.textLine = document.getElementById("text");
+    //this.ansText = document.getElementById("answerText");
+    //this.loader = document.getElementById("loader");
+
+    this.translationContainer = document.getElementById("translationContainer");
+    this.translationText = document.getElementById("translationText");
+
+    this.selectedVoice = 48; // this is Google-US en. Can set voice and language of choice
+
+    this.currentPredictedWords = [];
+    this.waitTimeForQuery = 10000;
+
+    this.synth.onvoiceschanged = function () {
+      this.populateVoiceList();
+    };
+
+  }
+
+  populateVoiceList() {
+    if (typeof speechSynthesis === 'undefined') {
+      console.log("no synth");
+      return;
+    }
+    this.voices = this.synth.getVoices();
+
+    if (this.voices.indexOf(this.selectedVoice) > 0) {
+      console.log(this.voices[this.selectedVoice].name + ':' + this.voices[this.selectedVoice].lang);
+    } else {
+      //alert("Selected voice for speech did not load or does not exist.\nCheck Internet Connection")
+    }
+  }
+
+  clearPara(queryDetected) {
+    this.translationText.innerText = '';
+    //this.ansText.innerText = '';
+    if (queryDetected) {
+      //this.loader.style.display = "block";
+    } else {
+      //this.loader.style.display = "none";
+      //this.ansText.innerText = "No query detected";
+      main.previousPrediction = -1;
+    }
+    this.currentPredictedWords = [];
+  }
+
+  speak(word) {
+    var _this10 = this;
+
+    if (word == 'start') {
+      console.log("clear para");
+      this.clearPara(true);
+
+      setTimeout(function () {
+        // if no query detected after start is signed
+        if (_this10.currentPredictedWords.length == 1) {
+          _this10.clearPara(false);
+        }
+      }, this.waitTimeForQuery);
+    }
+
+    if (word != 'start' && this.currentPredictedWords.length == 0) {
+      console.log("first word should be start");
+      console.log(word);
+      return;
+    }
+
+    if (this.currentPredictedWords.includes(word)) {
+      // prevent word from being detected repeatedly in phrase
+      console.log("word already been detected in current phrase");
+      return;
+    }
+
+    this.currentPredictedWords.push(word);
+
+    if (word == "start") {
+      this.translationText.innerText += ' ';
+    } else if (endWords.includes(word)) {
+      this.translationText.innerText += '.';
+    } else {
+      this.translationText.innerText += ' ' + word;
+    }
+
+    /* Might use Text to Speech in the future
+    var utterThis = new SpeechSynthesisUtterance(word);
+
+    utterThis.onend = function (evt) {
+        if (endWords.includes(word)) {
+            //if last word is one of end words start listening for transcribing
+            console.log("this was the last word");
+            main.setStatusText("Status: Waiting for Response");
+            //var stt = new SpeechToText();
+        }
+    };
+
+    utterThis.onerror = function (evt) {
+        console.log("Error speaking");
+    };
+
+    utterThis.voice = this.voices[this.selectedVoice];
+
+    utterThis.pitch = this.pitch;
+    utterThis.rate = this.rate;
+
+    this.synth.speak(utterThis);*/
+  }
 
 }
+
 
 var main = null;
 
@@ -622,5 +800,7 @@ window.addEventListener('load', () => {
     return
   }
 
+
   main = new Main()
+
 });
