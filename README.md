@@ -12,8 +12,9 @@ npm start
 - [ ] Video Chat + Real-time translation
 - [ ] Save Models Offline
 - [x] Click Card to Train Again function
-- [ ] Display Cards on Prediction Page
+- [x] Display Cards on Prediction Page
 - [ ] Display Accuracy on Cards
+- [ ] Copy Text on Translated Text Click
 - [ ] Empty Cards Display
 - [ ] Fix WebGl Context Loss
 - [ ] Organize style.css file

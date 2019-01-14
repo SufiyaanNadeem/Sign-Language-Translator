@@ -179,7 +179,6 @@ class Main {
             alert('You haven\'t added examples for the Stop Gesture.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.');
             return;
           }
-          predButton.innerText = "Back to Training";
 
           this.stageTitle.innerText = "Translate";
           this.textLine.innerText = "Start Translating with your Start Gesture.";
@@ -188,7 +187,7 @@ class Main {
           var trainingContainer = document.getElementById("train-new");
           trainingContainer.style.display = "none";
           var trainedCards = document.getElementById("trained_cards");
-          trainedCards.style.display = "none";
+          trainedCards.style.marginTop = "130px";
 
           this.translationContainer.style.display = "block";
 
@@ -202,6 +201,7 @@ class Main {
 
           console.log("sign your query");
 
+          predButton.innerText = "Back to Training";
 
           this.startPredicting();
         } else {
@@ -713,10 +713,11 @@ class Main {
                 // and is not the last class which is a catch all class
 
 
-                if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction && res.classIndex >= 3) { //  && res.classIndex != 1) {
-
+                if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction && res.classIndex >= 2) { //  && res.classIndex != 1) {
                   var translatedCard = document.getElementById("translatedCard");
-                  translatedCard.appendChild(this.gestureCards[i]);
+                  translatedCard.innerHTML = "";
+                  var gestCard = this.gestureCards[i];
+                  translatedCard.appendChild(gestCard);
                   this.tts.speak(words[i]);
                   console.log("word: " + words[i]);
 
