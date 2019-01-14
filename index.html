@@ -34,7 +34,7 @@ Author: Sufiyaan Nadeem
     </div>
 
     <button id="nextButton" class="animated flash delay-3s">Next</button>
-    <button id="predictButton" class="animated flash slideInRight faster">Predict</button>
+    <button id="predictButton" class="animated flash slideInRight faster">Translate</button>
 
     <div id="status">
         <p id="status-text">Status: Not Ready</p>
@@ -58,14 +58,16 @@ Author: Sufiyaan Nadeem
         </div>
 
         <div id="train-new">
-            <h5>Add Gesture</h5>
+            <h5 id="add-gesture">Add Gesture</h5>
 
-            <img src="Images/plus_sign.svg" alt="Plus Sign" class="plus_sign">
+            <img src="Images/plus_sign.svg" alt="Plus Sign" id="plus_sign" class="plus_sign animated">
 
             <form id="add-word" autocomplete="off">
                 <input type="text" id="new-word" placeholder="New Gesture Title">
                 <input type="submit" id="submit-word" value="Add Word &#9658;">
             </form>
+            <button id="done_training" class="done_training">Done Retraining</button>
+
 
             <!--Next/Predict Button-->
             <div id="trainingDisplay" class="trainButton"></div>

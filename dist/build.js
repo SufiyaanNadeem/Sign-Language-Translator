@@ -94,29 +94,29 @@
             var name = cname + "=";
             var decodedCookie = decodeURIComponent(document.cookie);
             var ca = decodedCookie.split(';');
-            for(var i = 0; i <ca.length; i++) {
-              var c = ca[i];
-              while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-              }
-              if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-              }
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
             }
             return "";
-          }
-          /*
-          function checkCookie() {
-            var knn = getCookie("knn");
-            if (knn != "") {
-             alert("Welcome again " + "Sufiyaan");
-            } else {
-                knn = prompt("Please enter your name:", "");
-              if (knn != "" && knn != null) {
-                setCookie("knn", knn, 365);
-              }
+        }
+        /*
+        function checkCookie() {
+          var knn = getCookie("knn");
+          if (knn != "") {
+           alert("Welcome again " + "Sufiyaan");
+          } else {
+              knn = prompt("Please enter your name:", "");
+            if (knn != "" && knn != null) {
+              setCookie("knn", knn, 365);
             }
-          }*/
+          }
+        }*/
 
 
 
@@ -172,16 +172,12 @@
                 this.fpsInterval = 1000 / this.fps;
                 this.elapsed = 0;
 
-                var knn = getCookie("knn");
-                if (knn != "") {
-                    alert("Welcome again " + "Sufiyaan");
+                this.knn = getCookie("knn");
+                if (this.knn != "") {
+                    alert("Welcome again " + "sufiyaan"); //this.knn.exampleCount[0]);
                 } else {
                     alert("nothing happened");
                     this.knn = null;
-                    /*knn = prompt("Please enter your name:", "");
-                if (knn != "" && knn != null) {
-                    setCookie("knn", knn, 365);
-                }*/
                 }
 
                 var name = getCookie("name");
@@ -197,7 +193,7 @@
                 }
                 //setCookie("name","Sufiyaan",365);
 
-                
+
                 this.initialKnn = this.knn;
 
                 this.stageTitle = document.getElementById("stage");
@@ -239,7 +235,7 @@
                 key: 'createPredictBtn',
                 value: function createPredictBtn() {
                     var _this3 = this;
-                    
+
 
                     var predButton = document.getElementById("predictButton");
                     predButton.style.display = "block";
@@ -263,7 +259,6 @@
                                     alert('You haven\'t added examples for the Stop Gesture.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.');
                                     return;
                                 }
-                                predButton.innerText = "Back to Training";
 
                                 _this3.stageTitle.innerText = "Translate";
                                 _this3.textLine.innerText = "Start Translating with your Start Gesture.";
@@ -286,14 +281,14 @@
 
                                 console.log("sign your query");
 
-
                                 _this3.startPredicting();
+                                predButton.innerText = "Back to Training";
+
                             } else {
                                 alert('You haven\'t added any examples yet.\n\nPress and hold on the "Add Example" button next to each word while performing the sign in front of the webcam.');
                             }
                         } else {
                             main.pausePredicting();
-                            predButton.innerText = "Translate";
 
                             _this3.stageTitle.innerText = "Train Gestures";
                             _this3.textLine.innerText = "Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.";
@@ -312,6 +307,8 @@
 
                             var video = document.getElementById("video");
                             video.className = "videoTrain";
+                            predButton.innerText = "Translate";
+
                         }
 
                     });
@@ -508,7 +505,7 @@
                     var _this7 = this;
 
                     var div = document.getElementById("trainingDisplay");
-
+                    div.innerHTML="";
                     // Create Word Text
                     var trainBtn = document.createElement('button');
                     trainBtn.className = "trainBtn";
@@ -552,8 +549,13 @@
 
                     var cardArea = document.getElementById("trained_cards");
                     var gestureCard = document.createElement("div");
+
+
+
+
                     gestureCard.className = "trained-gestures";
                     var gestName = words[i];
+
 
                     var gestureName = document.createElement("h5");
                     gestureName.innerText = gestName;
@@ -567,6 +569,21 @@
                     this.infoTexts.push(infoText);
                     this.checkMarks.push(checkMark);
                     this.gestureCards.push(gestureCard);
+
+
+                    gestureCard.addEventListener('mousedown', function () {
+                        if (gestureCard.style.marginTop == "17px" || gestureCard.style.marginTop == "") {
+                            document.getElementById("add-gesture").innerText = "Training: " + gestName;
+
+                            gestureCard.style.marginTop = "-10px";
+
+                            
+                        } else {
+                            document.getElementById("add-gesture").innerText = "Add Gesture";
+
+                            gestureCard.style.marginTop = "17px";
+                        }
+                    });
                 }
             }, {
                 key: 'intialBtn',
@@ -604,11 +621,13 @@
                     var cardArea = document.getElementById("trained_cards");
                     var gestureCard = document.createElement("div");
                     gestureCard.className = "trained-gestures";
+
+
                     var gestName = "";
                     if (btnType == "startButton") {
-                        gestName = "Start Button";
+                        gestName = "Start";
                     } else {
-                        gestName = "Stop Button";
+                        gestName = "Stop";
                     }
                     var gestureName = document.createElement("h5");
                     gestureName.innerText = gestName;
@@ -620,8 +639,23 @@
                     infoText.innerText = " 0 examples";
                     checkMark.src = 'Images\\loader.gif';
                     this.infoTexts.push(infoText);
-                    this.checkMarks.push(checkMark);
+                    // this.checkMarks.push(checkMark);
                     this.gestureCards.push(gestureCard);
+
+
+                    gestureCard.addEventListener('mousedown', function () {
+                        if (gestureCard.style.marginTop == "17px" || gestureCard.style.marginTop == "") {
+                            document.getElementById("add-gesture").innerText = "Training: " + gestName;
+
+                            gestureCard.style.marginTop = "-10px";
+                        } else {
+                            document.getElementById("add-gesture").innerText = "Add Gesture";
+
+                            gestureCard.style.marginTop = "17px";
+                        }
+                    });
+
+
                 }
             }, {
                 key: 'startTraining',

@@ -94,16 +94,16 @@ class Main {
     this.fpsInterval = 1000 / this.fps;
     this.elapsed = 0;
 
-    var knn = getCookie("knn");
-    if (knn != "") {
-      alert("Welcome again " + "Sufiyaan");
+    this.knn = getCookie("knn");
+    if (this.knn != "") {
+      alert("Welcome again " + "sufiyaan"); //this.knn.exampleCount[0]);
     } else {
       alert("nothing happened");
       this.knn = null;
       /*knn = prompt("Please enter your name:", "");
-    if (knn != "" && knn != null) {
-        setCookie("knn", knn, 365);
-    }*/
+                if (knn != "" && knn != null) {
+                    setCookie("knn", knn, 365);
+                }*/
     }
 
     var name = getCookie("name");
@@ -137,14 +137,14 @@ class Main {
     this.welcomeContainer = document.getElementById("welcomeContainer");
     this.proceedBtn = document.getElementById("proceedButton");
 
-    this.proceedBtn.addEventListener('mousedown', function () {
-      this.welcomeContainer.classList.add("slideOutUp");
-    });
 
-    this.video.addEventListener('mousedown', function () {
+    this.proceedBtn.addEventListener('mousedown', () => {
+      this.welcomeContainer.classList.add("slideOutUp");
+    })
+
+    this.video.addEventListener('mousedown', () => {
       // click on video to go back to training buttons
       main.pausePredicting();
-      //_this2.trainingListDiv.style.display = "block";
     });
 
     document.getElementById("status").style.display = "none";
@@ -163,14 +163,13 @@ class Main {
     var predButton = document.getElementById("predictButton");
     predButton.style.display = "block";
 
-    predButton.addEventListener('mousedown', function () {
+    predButton.addEventListener('mousedown', () => {
       if (predButton.innerText == "Translate") {
         setCookie("knn", this.knn, 365);
-        var exampleCount = this.knn.getClassExampleCount();
+        const exampleCount = this.knn.getClassExampleCount()
 
         // check if training has been done
-        if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
-
+        if (Math.max(...exampleCount) > 0) {
           // if wake word has not been trained
           if (exampleCount[0] == 0) {
             alert('You haven\'t added examples for the Start Gesture');
@@ -264,41 +263,35 @@ class Main {
   startWebcam() {
     // Setup webcam
     navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: 'user'
-      },
-      audio: false
-    }).then(function (stream) {
-      this.video.srcObject = stream;
-      this.video.width = IMAGE_SIZE;
-      this.video.height = IMAGE_SIZE;
+        video: {
+          facingMode: 'user'
+        },
+        audio: false
+      })
+      .then((stream) => {
+        this.video.srcObject = stream;
+        this.video.width = IMAGE_SIZE;
+        this.video.height = IMAGE_SIZE;
 
-      this.video.addEventListener('playing', function () {
-        return this.videoPlaying = true;
-      });
-      this.video.addEventListener('paused', function () {
-        return this.videoPlaying = false;
-      });
-    });
+        this.video.addEventListener('playing', () => this.videoPlaying = true);
+        this.video.addEventListener('paused', () => this.videoPlaying = false);
+      })
   }
 
 
   loadKNN() {
-    this.knn = new _deeplearnKnnImageClassifier.KNNImageClassifier(words.length, TOPK);
+    this.knn = new KNNImageClassifier(words.length, TOPK);
 
     // Load knn model
-    this.knn.load().then(function () {
-      return this.startTraining();
-    });
+    this.knn.load().then(() => this.startTraining());
   }
 
   createButtonList(showBtn) {
     // Create clear button to remove training examples
     var btn = document.getElementById('nextButton');
-    btn.addEventListener('mousedown', function () {
-      var exampleCount = this.knn.getClassExampleCount();
-      if (Math.max.apply(Math, _toConsumableArray(exampleCount)) >= 0) {
-
+    btn.addEventListener('mousedown', () => {
+      const exampleCount = this.knn.getClassExampleCount();
+      if (Math.max(...exampleCount) > 0) {
         // if wake word has not been trained
         if (exampleCount[0] == 0) {
           alert('You haven\'t added examples for the Start Gesture');
@@ -327,10 +320,10 @@ class Main {
     //showBtn - true: show training btns, false:show only text
 
     console.log("next step");
-    var exampleCount = this.knn.getClassExampleCount();
+    const exampleCount = this.knn.getClassExampleCount();
 
     // check if training has been done
-    if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
+    if (Math.max(...exampleCount) > 0) {
 
       // if wake word has not been trained
       if (exampleCount[0] == 0) {
@@ -364,7 +357,7 @@ class Main {
       }*/
 
       this.addWordForm = document.getElementById("add-word");
-      this.addWordForm.addEventListener('submit', function (e) {
+      this.addWordForm.addEventListener('submit', (e) => {
         var trainingDiv = document.getElementById("trainingDisplay");
         trainingDiv.innerHTML = "";
 
@@ -430,15 +423,15 @@ class Main {
     div.appendChild(clearBtn);
 
     // Listen for mouse events when clicking the button
-    trainBtn.addEventListener('mousedown', function () {
+    trainBtn.addEventListener('mousedown', () => {
       return this.training = i;
     });
-    trainBtn.addEventListener('mouseup', function () {
+    trainBtn.addEventListener('mouseup', () => {
       return this.training = -1;
     });
 
 
-    clearBtn.addEventListener('mousedown', function () {
+    clearBtn.addEventListener('mousedown', () => {
       console.log("clear training data for this label");
       this.knn.clearClass(i);
       this.infoTexts[i].innerText = " 0 examples";
@@ -472,27 +465,59 @@ class Main {
     this.infoTexts.push(infoText);
     this.checkMarks.push(checkMark);
     this.gestureCards.push(gestureCard);
-  }
+
+    gestureCard.addEventListener('mousedown', () => { //create btn
+      if (gestureCard.style.marginTop == "17px" || gestureCard.style.marginTop == "") {
+        document.getElementById("add-word").style.display = "none";
+        div.innerHTML = "";
+
+        document.getElementById("add-gesture").innerText = gestName;
+
+        var plusImage = document.getElementById("plus_sign");
+        plusImage.src = "Images/retrain.svg";
+        plusImage.classList.add("rotateIn");
+        var doneTrainingBtn = document.getElementById("done_training");
+        doneTrainingBtn.style.display = "block";
+        div.appendChild(trainBtn);
+        div.appendChild(clearBtn);
+        div.appendChild(infoText);
+        div.appendChild(checkMark);
+        gestureCard.style.marginTop = "-10px";
+      } else {
+        document.getElementById("add-gesture").innerText = "Add Gesture";
+        document.getElementById("add-word").style.display = "block";
+        gestureCard.style.marginTop = "17px";
+
+      }
+    });
+
+    var doneTrainingBtn = document.getElementById("done_training");
+    doneTrainingBtn.addEventListener('mousedown', () => {
+      div.innerHTML = "";
+      document.getElementById("add-word").style.display = "block";
+      doneTrainingBtn.style.display = "none";
+    });
+  };
 
   intialBtn(i, btnType) {
     // Create training button
-    var button = document.getElementById(btnType);
+    var trainBtn = document.getElementById(btnType);
     //button.innerText = "Add Example"; //"Train " + words[i].toUpperCase()
     //div.appendChild(button);
 
     // Listen for mouse events when clicking the button
-    button.addEventListener('mousedown', function () {
+    trainBtn.addEventListener('mousedown', () => {
       return this.training = i;
     });
-    button.addEventListener('mouseup', function () {
+    trainBtn.addEventListener('mouseup', () => {
       return this.training = -1;
     });
 
     // Create clear button to remove training examples
-    var btn = document.getElementById('clear_' + btnType);
+    var clearBtn = document.getElementById('clear_' + btnType);
 
 
-    btn.addEventListener('mousedown', function () {
+    clearBtn.addEventListener('mousedown', () => {
       console.log("clear training data for this label");
       this.knn.clearClass(i);
       this.infoTexts[i].innerText = " 0 examples";
@@ -508,9 +533,9 @@ class Main {
     gestureCard.className = "trained-gestures";
     var gestName = "";
     if (btnType == "startButton") {
-      gestName = "Start Button";
+      gestName = "Start";
     } else {
-      gestName = "Stop Button";
+      gestName = "Stop";
     }
     var gestureName = document.createElement("h5");
     gestureName.innerText = gestName;
@@ -524,6 +549,42 @@ class Main {
     this.infoTexts.push(infoText);
     this.checkMarks.push(checkMark);
     this.gestureCards.push(gestureCard);
+    var div = document.getElementById("trainingDisplay");
+
+    gestureCard.addEventListener('mousedown', () => { //inital  btn
+      if (gestureCard.style.marginTop == "17px" || gestureCard.style.marginTop == "") {
+        document.getElementById("add-word").style.display = "none";
+        div.innerHTML = "";
+
+        document.getElementById("add-gesture").innerText = gestName;
+
+        var plusImage = document.getElementById("plus_sign");
+        plusImage.src = "Images/retrain.svg";
+        plusImage.classList.add("rotateIn");
+        var doneTrainingBtn = document.getElementById("done_training");
+        doneTrainingBtn.style.display = "block";
+        trainBtn.className = "trainBtn";
+        trainBtn.innerText = "Train";
+
+
+        div.appendChild(trainBtn);
+        div.appendChild(clearBtn);
+        div.appendChild(infoText);
+        div.appendChild(checkMark);
+        gestureCard.style.marginTop = "-10px";
+      } else {
+        document.getElementById("add-gesture").innerText = "Add Gesture";
+        document.getElementById("add-word").style.display = "block";
+        gestureCard.style.marginTop = "17px";
+      }
+    });
+
+    var doneTrainingBtn = document.getElementById("done_training");
+    doneTrainingBtn.addEventListener('mousedown', () => {
+      div.innerHTML = "";
+      document.getElementById("add-word").style.display = "block";
+      doneTrainingBtn.style.display = "none";
+    });
   }
 
   startTraining() {
@@ -533,14 +594,12 @@ class Main {
     var promise = this.video.play();
 
     if (promise !== undefined) {
-      promise.then(function (_) {
-        console.log("Autoplay started");
-      }).catch(function (error) {
-        console.log("Autoplay prevented");
-      });
+      promise.then(_ => {
+        console.log("Autoplay started")
+      }).catch(error => {
+        console.log("Autoplay prevented")
+      })
     }
-
-    //Below is what calls the train
     this.timer = requestAnimationFrame(this.train.bind(this));
   }
 
@@ -553,9 +612,10 @@ class Main {
 
   train() {
     var btn = document.getElementById('nextButton');
-    btn.addEventListener('mousedown', function () {
-      var exampleCount = this.knn.getClassExampleCount();
-      if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
+    btn.addEventListener('mousedown', () => {
+      const exampleCount = this.knn.getClassExampleCount()
+
+      if (Math.max(...exampleCount) > 0) {
         // if wake word has not been trained
         if (exampleCount[0] == 0) {
           return;
@@ -573,16 +633,16 @@ class Main {
       console.log(this.training);
 
       // Get image data from video element
-      var image = dl.fromPixels(this.video);
+      const image = dl.fromPixels(this.video);
       // Train class if one of the buttons is held down
       if (this.training != -1) {
         // Add current image to classifier
         this.knn.addImage(image, this.training);
       }
 
-      var exampleCount = this.knn.getClassExampleCount();
-      console.log("Start examples: " + exampleCount[0]);
-      if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
+      const exampleCount = this.knn.getClassExampleCount()
+
+      if (Math.max(...exampleCount) > 0) {
         for (var i = 0; i < words.length; i++) {
           if (exampleCount[i] > 0) {
             this.infoTexts[i].innerText = ' ' + exampleCount[i] + ' examples';
@@ -636,28 +696,29 @@ class Main {
       this.then = this.now - this.elapsed % this.fpsInterval;
 
       if (this.videoPlaying) {
-        var exampleCount = this.knn.getClassExampleCount();
+        const exampleCount = this.knn.getClassExampleCount();
 
-        var image = dl.fromPixels(this.video);
+        const image = dl.fromPixels(this.video);
 
-        if (Math.max.apply(Math, _toConsumableArray(exampleCount)) > 0) {
-          this.knn.predictClass(image).then(function (res) {
-            for (var i = 0; i < words.length; i++) {
-              console.log(words[i] + " confidence: " + res.confidences[i]);
-              // if matches & is above threshold & isnt same as prev prediction
-              // and is not the last class which is a catch all class
-              if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction) { //  && res.classIndex != 1) {
+        if (Math.max(...exampleCount) > 0) {
+          this.knn.predictClass(image)
+            .then((res) => {
+              for (let i = 0; i < words.length; i++) {
 
-                this.tts.speak(words[i]);
-                console.log("word: " + words[i]);
+                // if matches & is above threshold & isnt same as prev prediction
+                // and is not the last class which is a catch all class
 
-                // set previous prediction so it doesnt get called again
-                this.previousPrediction = res.classIndex;
+
+                if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction) { //  && res.classIndex != 1) {
+
+                  this.tts.speak(words[i]);
+                  console.log("word: " + words[i]);
+
+                  // set previous prediction so it doesnt get called again
+                  this.previousPrediction = res.classIndex;
+                }
               }
-            }
-          }).then(function () {
-            return image.dispose();
-          });
+            }).then(() => image.dispose())
         } else {
           image.dispose();
         }
@@ -692,8 +753,8 @@ class TextToSpeech {
     this.currentPredictedWords = [];
     this.waitTimeForQuery = 10000;
 
-    this.synth.onvoiceschanged = function () {
-      this.populateVoiceList();
+    this.synth.onvoiceschanged = () => {
+      this.populateVoiceList()
     };
 
   }
@@ -732,7 +793,7 @@ class TextToSpeech {
       console.log("clear para");
       this.clearPara(true);
 
-      setTimeout(function () {
+      setTimeout(() => {
         // if no query detected after start is signed
         if (_this10.currentPredictedWords.length == 1) {
           _this10.clearPara(false);
