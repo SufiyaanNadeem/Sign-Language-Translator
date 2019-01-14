@@ -11,7 +11,7 @@ npm start
 - [x] Back to Training function
 - [ ] Video Chat + Real-time translation
 - [ ] Save Models Offline
-- [ ] Click Card to Train Again function
+- [x] Click Card to Train Again function
 - [ ] Display Cards on Prediction Page
 - [ ] Display Accuracy on Cards
 - [ ] Empty Cards Display

@@ -713,10 +713,8 @@ class Main {
                 // and is not the last class which is a catch all class
 
 
-                if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction && res.classIndex >= 3) { //  && res.classIndex != 1) {
+                if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction) { //  && res.classIndex != 1) {
 
-                  var translatedCard = document.getElementById("translatedCard");
-                  translatedCard.appendChild(this.gestureCards[i]);
                   this.tts.speak(words[i]);
                   console.log("word: " + words[i]);
 

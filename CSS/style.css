@@ -398,6 +398,12 @@ img.plus_sign {
   /*border: 1px solid orange;*/
 }
 
+#translatedCard {
+  width: 20%;
+  top: 100px;
+  position: absolute;
+}
+
 img.trained_image {
   height: 130px;
   display: block;
