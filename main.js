@@ -678,16 +678,43 @@ class Main {
       this.stopTraining();
     }
 
-    this.setStatusText("Status: Ready to Predict!");
+    this.setStatusText("Status: Ready to Predict!", "predict");
 
     this.video.play();
+
+    this.translationContainer.addEventListener('mousedown', () => {
+      console.log("Translated Text Copied!");
+      this.setStatusText("Text Copied!", "copy");
+      const el = document.createElement('textarea'); // Create a <textarea> element
+      el.value = this.translationText.innerText; // Set its value to the string that you want copied
+      el.setAttribute('readonly', ''); // Make it readonly to be tamper-proof
+      el.style.position = 'absolute';
+      el.style.left = '-9999px'; // Move outside the screen to make it invisible
+      document.body.appendChild(el); // Append the <textarea> element to the HTML document
+      const selected =
+        document.getSelection().rangeCount > 0 // Check if there is any content selected previously
+        ?
+        document.getSelection().getRangeAt(0) // Store selection if found
+        :
+        false; // Mark as false to know no selection existed before
+      el.select(); // Select the <textarea> content
+      document.execCommand('copy'); // Copy - only works as a result of a user action (e.g. click events)
+      document.body.removeChild(el); // Remove the <textarea> element
+      if (selected) { // If a selection existed before copying
+        document.getSelection().removeAllRanges(); // Unselect everything on the HTML document
+        document.getSelection().addRange(selected); // Restore the original selection
+      }
+    });
+
+
+
 
     this.pred = requestAnimationFrame(this.predict.bind(this));
   }
 
   pausePredicting() {
     console.log("pause predicting");
-    this.setStatusText("Status: Paused Predicting");
+    this.setStatusText("Status: Paused Predicting", "predict");
     cancelAnimationFrame(this.pred);
   }
 
@@ -711,9 +738,9 @@ class Main {
 
                 // if matches & is above threshold & isnt same as prev prediction
                 // and is not the last class which is a catch all class
-
-
                 if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction && res.classIndex >= 2) { //  && res.classIndex != 1) {
+                  this.setStatusText("Status: Ready to Predict!", "predict");
+
                   var translatedCard = document.getElementById("translatedCard");
                   translatedCard.innerHTML = "";
                   var gestCard = this.gestureCards[i];
@@ -735,9 +762,16 @@ class Main {
     this.pred = requestAnimationFrame(this.predict.bind(this));
   }
 
-  setStatusText(status) {
-    document.getElementById("status").style.display = "block";
+  setStatusText(status, type) { //make default type thing
+    this.statusContainer = document.getElementById("status");
+    this.statusContainer.style.display = "block";
     this.statusText.innerText = status;
+    if (type == "copy") {
+      console.log("copy");
+      this.statusContainer.style.backgroundColor = "blue";
+    } else {
+      this.statusContainer.style.backgroundColor = "black";
+    }
   }
 }
 

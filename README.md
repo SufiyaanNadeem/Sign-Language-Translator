@@ -14,9 +14,8 @@ npm start
 - [x] Click Card to Train Again function
 - [x] Display Cards on Prediction Page
 - [ ] Display Accuracy on Cards
-- [ ] Copy Text on Translated Text Click
-- [ ] Empty Cards Display
+- [x] Copy Text on Translated Text Click
 - [ ] Fix WebGl Context Loss
-- [ ] Organize style.css file
-- [ ] Cohesive Text Styling
-- [ ] Comprehensive Commenting
+- [ ] Organize style.css file ---
+- [ ] Cohesive Text Styling ---
+- [ ] Comprehensive Commenting ---

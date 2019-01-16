@@ -1,5 +1,5 @@
 /*
-Style Sheet for American Sign Language Translator. This file is responsible for the aesthetics of the index.html
+Style Sheet for American Sign Language Translator. This file is responsible for the aesthetics of the Translator
 
 Author: Sufiyaan Nadeem
 */
@@ -26,99 +26,6 @@ body::-webkit-scrollbar-thumb {
 
 body::-webkit-scrollbar-thumb:hover {
   background-color: #bababa;
-}
-
-#video {
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  /* Safari and Chrome */
-  -moz-transform: rotateY(180deg);
-  /* Firefox */
-  background-color: black;
-  transition: 1s;
-}
-
-#videoHolder {
-  /* Firefox */
-  background-color: black;
-  border: 8px solid black;
-  display: inline-block;
-  border-radius: 5px;
-  vertical-align: middle;
-  transition: 1s;
-}
-
-.videoContainerTrain {
-  height: 305px;
-  width: 500px;
-  margin-top: 0px;
-}
-
-.videoContainerPredict {
-  width: 650px;
-  height: 370px;
-  margin-top: -35px;
-}
-
-.videoTrain {
-  height: 300px;
-  width: 400px;
-}
-
-.videoPredict {
-  height: 370px;
-  width: 500px;
-}
-
-#status {
-  width: 300px;
-  height: 50px;
-  background-color: black;
-  position: absolute;
-  z-index: 3;
-  /* top: 10%; */
-  left: 0%;
-  /* transform: translateX(-50%); */
-  /* border: 7px solid black; */
-  border-top: none;
-  text-align: center;
-  /* border-bottom-left-radius: 10px; */
-  border-bottom-right-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-#status p {
-  color: white;
-  font-weight: 500;
-}
-
-#checkmark_startButton {
-  padding-bottom: 5px;
-}
-
-#checkmark_stopButton {
-  display: block;
-  margin: 0 auto;
-  margin-top: 5px;
-}
-
-.checkMark {
-  height: 30px;
-}
-
-#training {
-  width: 100%;
-  height: 350px;
-  display: inline-block;
-  z-index: 1;
-  margin-top: 200px;
-  left: 50%;
-  text-align: center;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  color: black;
-  vertical-align: middle;
-  /*background-color: orange;*/
 }
 
 #welcomeContainer {
@@ -186,16 +93,58 @@ body::-webkit-scrollbar-thumb:hover {
   font-weight: 500;
 }
 
-.done_training {
-  background-color: white;
-  border: none;
-  color: black;
-  font-weight: 700;
-  font-size: 15px;
-  margin-top: 1px;
-  border-radius: 3px;
+#video {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  background-color: black;
+  transition: 1s;
+}
+
+#videoHolder {
+  background-color: black;
+  border: 8px solid black;
+  display: inline-block;
+  border-radius: 5px;
   vertical-align: middle;
-  display: none;
+  transition: 1s;
+}
+
+.videoContainerTrain {
+  height: 305px;
+  width: 500px;
+  margin-top: 0px;
+}
+
+.videoContainerPredict {
+  width: 650px;
+  height: 370px;
+  margin-top: -35px;
+}
+
+.videoTrain {
+  height: 400px;
+  width: 498px;
+}
+
+.videoPredict {
+  height: 370px;
+  width: 500px;
+}
+
+h5 {
+  font-size: 30px;
+  font-weight: 300;
+  margin: 0px;
+}
+
+h7 {
+  font-size: 20px;
+  margin: 0px;
+  /*border: 1px solid orange;*/
+  font-weight: 300;
+  font-style: italic;
+  font-family: 'Product Sans';
 }
 
 button {
@@ -215,6 +164,27 @@ button {
   transition: .3s;
 }
 
+button:active {
+  box-shadow: none;
+}
+
+#checkmark_startButton {
+  padding-bottom: 5px;
+}
+
+#checkmark_stopButton {
+  display: block;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+
+#proceedButton {
+  top: 90%;
+  transform: translate(-50%, 0%);
+  left: 50%;
+  position: fixed;
+}
+
 #startButton {
   display: block;
   margin: 0 auto;
@@ -224,15 +194,6 @@ button {
   margin: 0 auto;
   margin-top: 50px;
   display: block;
-}
-
-.counter {
-  font-weight: 100;
-  font-size: 18px;
-  color: black;
-  display: inline-block;
-  padding: 0px;
-  margin: 0px;
 }
 
 .clearButton {
@@ -252,15 +213,83 @@ button {
   margin-right: 20px;
 }
 
-button:active {
-  box-shadow: none;
+.trainButton {
+  margin-top: 25px;
+  right: 2.5%;
+  z-index: 3;
 }
 
-#proceedButton {
-  top: 90%;
-  transform: translate(-50%, 0%);
-  left: 50%;
+#nextButton {
+  top: 6%;
+  right: 2.5%;
+  z-index: 2;
   position: fixed;
+}
+
+#predictButton {
+  top: 6%;
+  right: 2.5%;
+  z-index: 2;
+  position: fixed;
+  display: none;
+}
+
+#status {
+  width: 300px;
+  height: 50px;
+  background-color: black;
+  position: absolute;
+  z-index: 3;
+  left: 0%;
+  border-top: none;
+  text-align: center;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: .4s;
+}
+
+#status p {
+  color: white;
+  font-weight: 500;
+}
+
+#training {
+  width: 100%;
+  height: 350px;
+  display: inline-block;
+  z-index: 1;
+  margin-top: 200px;
+  left: 50%;
+  text-align: center;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  color: black;
+  vertical-align: middle;
+}
+
+.checkMark {
+  height: 30px;
+}
+
+.done_training {
+  background-color: white;
+  border: none;
+  color: black;
+  font-weight: 700;
+  font-size: 15px;
+  margin-top: 1px;
+  border-radius: 3px;
+  vertical-align: middle;
+  display: none;
+}
+
+.counter {
+  font-weight: 100;
+  font-size: 18px;
+  color: black;
+  display: inline-block;
+  padding: 0px;
+  margin: 0px;
 }
 
 #trainingTitle {
@@ -301,28 +330,6 @@ button:active {
   font-size: 22px;
   /*border: 1px solid orange;*/
   font-weight: 500;
-}
-
-#nextButton {
-  top: 6%;
-  right: 2.5%;
-  z-index: 2;
-  position: fixed;
-}
-
-#predictButton {
-  top: 6%;
-  right: 2.5%;
-  z-index: 2;
-  position: fixed;
-  display: none;
-}
-
-#debugButton {
-  top: 12%;
-  right: 2.5%;
-  z-index: 2;
-  position: fixed;
 }
 
 .trained-gestures {
@@ -384,13 +391,6 @@ button:active {
   font-weight: 100;
 }
 
-h5 {
-  font-size: 30px;
-  /*border: 1px solid orange;*/
-  font-weight: 300;
-  margin: 0px;
-}
-
 img.plus_sign {
   height: 80px;
   display: block;
@@ -422,43 +422,10 @@ canvas.trained_image {
   /*border: 1px solid orange;*/
 }
 
-h7 {
-  font-size: 20px;
-  margin: 0px;
-  /*border: 1px solid orange;*/
-  font-weight: 300;
-  font-style: italic;
-  font-family: 'Product Sans';
-}
-
 label {
   display: block;
   margin-top: 1px;
 }
-
-h1 {
-  font-family: 'Baloo Bhaina', "Helvetica Neue", "sans-serif";
-  font-size: 80px;
-  font-weight: bold;
-  line-height: 100%;
-}
-
-h1 .subtext {
-  font-family: "Helvetica Neue", "sans-serif";
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 16px;
-}
-
-.intro-steps {
-  font-size: 30px;
-}
-
-/*
-#add-word {
-  border: 1px solid #333;
-  font-size: 12px;
-}*/
 
 #new-word {
   text-align: center;
@@ -481,215 +448,4 @@ h1 .subtext {
   margin-top: 1px;
   border-radius: 3px;
   vertical-align: middle;
-}
-
-#count {
-  color: black;
-}
-
-#example-list {
-  color: black
-}
-
-.trainButton {
-  margin-top: 25px;
-  right: 2.5%;
-  z-index: 3;
-}
-
-.split-left {
-  text-align: center;
-  height: 100%;
-  left: 0;
-  width: 39.75%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-right: 5px solid black;
-  background: tomato;
-}
-
-.split-left h1 {
-  color: white;
-}
-
-.split-right {
-  height: 100%;
-  width: 59.75%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
-  right: 0;
-  padding-bottom: 20px;
-  border-left: 5px solid black;
-  background: white;
-}
-
-/* If you want the content centered horizontally and vertically */
-
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  width: 75%;
-}
-
-#info {
-  margin-bottom: 30px;
-}
-
-#loader, #loader:before, #loader:after {
-  background: #000000;
-  -webkit-animation: load1 1s infinite ease-in-out;
-  animation: load1 1s infinite ease-in-out;
-  width: 1em;
-  height: 4em;
-}
-
-#loader {
-  color: #000000;
-  text-indent: -9999em;
-  margin: 88px auto;
-  position: relative;
-  font-size: 11px;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
-  display: none;
-}
-
-#loader:before, #loader:after {
-  position: absolute;
-  top: 0;
-  content: '';
-}
-
-#loader:before {
-  left: -1.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-
-#loader:after {
-  left: 1.5em;
-}
-
-@-webkit-keyframes load1 {
-  0%, 80%, 100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
-}
-
-@keyframes load1 {
-  0%, 80%, 100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
-}
-
-/* The Modal (background) */
-
-.modal {
-  display: none;
-  /* Hidden by default */
-  position: fixed;
-  /* Stay in place */
-  z-index: 1;
-  /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%;
-  /* Full width */
-  height: 100%;
-  /* Full height */
-  overflow: auto;
-  /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0);
-  /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4);
-  /* Black w/ opacity */
-}
-
-/* Modal Header */
-
-.modal-header {
-  padding: 2px 16px;
-  background-color: deepskyblue;
-  color: white;
-}
-
-/* Modal Body */
-
-.modal-body {
-  padding: 2px 16px;
-}
-
-/* Modal Footer */
-
-.modal-footer {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
-}
-
-/* Modal Content */
-
-.modal-content {
-  position: relative;
-  background-color: #fefefe;
-  margin: auto;
-  padding: 0;
-  border: 1px solid #888;
-  width: 40%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  animation-name: animatetop;
-  animation-duration: 0.4s;
-  top: 10%;
-  text-align: center;
-}
-
-/* Add Animation */
-
-@keyframes animatetop {
-  from {
-    top: -300px;
-    opacity: 0
-  }
-  to {
-    top: 10%;
-    opacity: 1
-  }
-}
-
-/* The Close Button */
-
-#close-modal {
-  color: white;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-#close-modal:hover, #close-modal:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
 }
