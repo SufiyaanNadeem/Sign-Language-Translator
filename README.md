@@ -16,6 +16,6 @@ npm start
 - [ ] Display Accuracy on Cards
 - [x] Copy Text on Translated Text Click
 - [ ] Fix WebGl Context Loss
-- [ ] Organize style.css file ---
-- [ ] Cohesive Text Styling ---
+- [x] Organize style.css file
+- [x] Cohesive Text Styling
 - [ ] Comprehensive Commenting ---
