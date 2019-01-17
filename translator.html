@@ -20,6 +20,9 @@ Author: Sufiyaan Nadeem
 </head>
 
 <body>
+
+
+
     <div id="welcomeContainer" class="animated">
         <div id="welcomeScreen">
             <h1>Welcome to ASL Translator</h1>
@@ -35,6 +38,7 @@ Author: Sufiyaan Nadeem
 
     <button id="nextButton" class="animated flash delay-3s">Next</button>
     <button id="predictButton" class="animated flash slideInRight faster">Translate</button>
+    <button id="videoChatBtn" class="videoChatBtn">Video Chat</button>
 
     <div id="status">
         <p id="status-text">Status: Not Ready</p>
@@ -55,6 +59,11 @@ Author: Sufiyaan Nadeem
 
         <div id="videoHolder" class="videoContainerTrain">
             <video id="video" class="videoTrain" src='' muted autoplay playsinline></video>
+
+
+            <iframe src="https://tokbox.com/embed/embed/ot-embed.js?embedId=f37957b6-0f91-4fc5-90ce-f818cc85b5bf&room=DEFAULT_ROOM&iframe=true"
+                width=650 height=370 allow="microphone; camera" id="videoCall"></iframe>
+
         </div>
 
         <div id="train-new">

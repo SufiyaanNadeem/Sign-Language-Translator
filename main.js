@@ -94,30 +94,9 @@ class Main {
     this.fpsInterval = 1000 / this.fps;
     this.elapsed = 0;
 
-    this.knn = getCookie("knn");
-    if (this.knn != "") {
-      //alert("Welcome again " + "sufiyaan"); //this.knn.exampleCount[0]);
-    } else {
-      //alert("nothing happened");
-      this.knn = null;
-      /*knn = prompt("Please enter your name:", "");
-                if (knn != "" && knn != null) {
-                    setCookie("knn", knn, 365);
-                }*/
-    }
 
-    var name = getCookie("name");
-    if (name != "") {
-      alert("Welcome again " + name);
-    } else {
-      //alert("nothing happened");
-      this.name = null;
-      name = prompt("Please enter your name:", "");
-      if (name != "" && name != null) {
-        setCookie("name", name, 365);
-      }
-    }
-    //setCookie("name","Sufiyaan",365);
+    this.knn = null;
+
 
 
     this.initialKnn = this.knn;
@@ -161,9 +140,32 @@ class Main {
     var predButton = document.getElementById("predictButton");
     predButton.style.display = "block";
 
+    var videoChatBtn = document.getElementById("videoChatBtn");
+    var videoCall = document.getElementById("videoCall");
+    var videoContainer = document.getElementById("videoHolder");
+    videoChatBtn.addEventListener('mousedown', () => {
+      this.video.style.display = "none";
+      videoContainer.style.borderStyle = "none";
+      videoContainer.style.overflow = "hidden";
+      videoContainer.style.width = "630px";
+      videoContainer.style.height = "350px";
+      videoCall.style.display = "block";
+    })
+
     predButton.addEventListener('mousedown', () => {
       if (predButton.innerText == "Translate") {
-        setCookie("knn", this.knn, 365);
+        videoContainer.style.display = "inline-block";
+
+        videoChatBtn.style.display = "block";
+
+        videoCall.style.display = "none";
+        videoContainer.style.width = "";
+        videoContainer.style.height = "";
+
+        videoContainer.style.borderStyle = "8px solid black";
+
+
+
         const exampleCount = this.knn.getClassExampleCount()
 
         // check if training has been done
@@ -192,7 +194,6 @@ class Main {
           this.translationContainer.style.display = "block";
 
 
-          var videoContainer = document.getElementById("videoHolder");
           videoContainer.className = "videoContainerPredict";
 
           var video = document.getElementById("video");
@@ -201,7 +202,11 @@ class Main {
 
           console.log("sign your query");
 
+          predButton.style.left = "2.5%";
+          predButton.style.right = "";
           predButton.innerText = "Back to Training";
+
+
 
           this.startPredicting();
         } else {
@@ -209,7 +214,9 @@ class Main {
         }
       } else {
         main.pausePredicting();
-        predButton.innerText = "Translate";
+        videoChatBtn.style.display = "none";
+        var trainedCards = document.getElementById("trained_cards");
+        trainedCards.style.marginTop = "0px";
 
         this.stageTitle.innerText = "Train Gestures";
         this.textLine.innerText = "Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.";
@@ -223,11 +230,17 @@ class Main {
         this.translationContainer.style.display = "none";
 
 
-        var videoContainer = document.getElementById("videoHolder");
+
         videoContainer.className = "videoContainerTrain";
 
         var video = document.getElementById("video");
         video.className = "videoTrain";
+
+        predButton.innerText = "Translate";
+        predButton.style.left = "";
+        predButton.style.right = "2.5%";
+
+
       }
 
     })
@@ -303,7 +316,7 @@ class Main {
         btn.style.display = "none";
         this.stageTitle.innerText = "Continue Training";
         this.textLine.innerText = "Add Gesture Name and Train.";
-
+        this.video.className = "videoTrain";
         this.createGestureList(true);
       }
     });
@@ -672,11 +685,17 @@ class Main {
 
   }
 
+  saveKnn() {
+
+  }
+
   startPredicting() {
     // stop training
     if (this.timer) {
       this.stopTraining();
     }
+
+    this.saveKnn();
 
     this.setStatusText("Status: Ready to Predict!", "predict");
 
@@ -738,7 +757,7 @@ class Main {
 
                 // if matches & is above threshold & isnt same as prev prediction
                 // and is not the last class which is a catch all class
-                if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction && res.classIndex >= 2) { //  && res.classIndex != 1) {
+                if (res.classIndex == i && res.confidences[i] > predictionThreshold && res.classIndex != this.previousPrediction && res.classIndex != 1) { //  && res.classIndex != 1) {
                   this.setStatusText("Status: Ready to Predict!", "predict");
 
                   var translatedCard = document.getElementById("translatedCard");
@@ -783,8 +802,6 @@ class TextToSpeech {
     this.rate = 0.9;
 
     this.textLine = document.getElementById("text");
-    //this.ansText = document.getElementById("answerText");
-    //this.loader = document.getElementById("loader");
 
     this.translationContainer = document.getElementById("translationContainer");
     this.translationText = document.getElementById("translationText");
@@ -829,6 +846,7 @@ class TextToSpeech {
 
   speak(word) {
     var _this10 = this;
+    console.log("entered speak");
 
     if (word == 'start') {
       console.log("clear para");
