@@ -14,7 +14,7 @@ Fix Alerts
     <!--Sets up stylesheet and script file linking. Adds favicon and site title as well-->
     <meta charset="UTF-8">
     <link rel="shortcut icon" type="image/png" href="Images/asl_logo.ico" />
-    <title>ASL Translator | Sufiyaan</title>
+    <title>Sign Translator | Sufiyaan</title>
     <link href="https://fonts.googleapis.com/css?family=Google+Sans:100,300,400,500" rel="stylesheet">
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/animate.css">
@@ -25,10 +25,10 @@ Fix Alerts
     <!--Welcome Screen-->
     <div id="welcomeContainer" class="animated">
         <div id="welcomeScreen">
-            <h1>Welcome to ASL Translator</h1>
+            <h1>Welcome to Sign Language Translator</h1>
             <h3 class="animated fadeInUp delay-2s">Sufiyaan Nadeem</h3>
         </div>
-        <button class="animated flash delay-3s" id="proceedButton">Proceed</button>
+        <button id="proceedButton">Proceed</button>
     </div>
 
     <!--Title bar explains the stage of the program 
@@ -38,7 +38,8 @@ Fix Alerts
         <h3 id="steps">Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.</h3>
         <button id="nextButton" class="animated flash delay-3s">Next</button>
         <button id="predictButton" class="animated flash slideInRight faster">Translate</button>
-        <button id="videoCallBtn" class="videoCallBtn">Video Chat</button>
+        <button id="backButton" class="animated slideInLeft faster">Back to Training</button>
+        <button id="videoCallBtn" class="videoCallBtn animated slideInRight faster">Video Call</button>
     </div>
 
     <!--Status bar shows the status of translation-->

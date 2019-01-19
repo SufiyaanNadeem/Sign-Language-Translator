@@ -144,6 +144,7 @@ h5 {
   font-size: 30px;
   font-weight: 300;
   margin: 0px;
+  height: 40px;
 }
 
 h7 {
@@ -191,6 +192,7 @@ button:active {
   transform: translate(-50%, 0%);
   left: 50%;
   position: fixed;
+  display: none;
 }
 
 #startButton {
@@ -242,6 +244,14 @@ button:active {
   display: none;
 }
 
+#backButton {
+  top: 30%;
+  left: 2.5%;
+  z-index: 2;
+  position: fixed;
+  display: none;
+}
+
 .videoCallBtn {
   top: 30%;
   right: 2.5%;
@@ -264,6 +274,7 @@ button:active {
   border-bottom-right-radius: 10px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
   transition: .4s;
+  display: none;
 }
 
 #status p {
