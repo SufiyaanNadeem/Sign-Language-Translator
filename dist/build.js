@@ -1,7 +1,9 @@
 /* 
 Build.js is the local version of Main.js.
-It handles training, classification, and output of sign language gestures. The reason its a larger file is because
-TensorFlow isn't directly imported here.
+It handles training, classification, and output of sign language gestures. 
+The reason this file is so large and less readable compared to Main.js is because the Squeeze Net 
+and kNN algorithms are directly pasted here for convenient local running without npm. For a more readable
+version of this file, please visit main.js.
 
 - The Main class is responsible for altering page elements on the user interface such as buttons,
 video elements, etc. It is also handles the training, prediction, and video call features.
@@ -99,22 +101,6 @@ Author: Sufiyaan Nadeem
                     throw new TypeError("Cannot call a class as a function");
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             // Webcam Image size. Must be 227.
             const IMAGE_SIZE = 227;
@@ -891,7 +877,7 @@ Author: Sufiyaan Nadeem
                         var _this7=this;
 
                         this.translationHolder.addEventListener('mousedown', function () {
-                            _this7.setStatusText("Text Copied!", "copy");
+                            main.setStatusText("Text Copied!", "copy");
                             const el = document.createElement('textarea'); // Create a <textarea> element
                             el.value = _this7.translationText.innerText; // Set its value to the string that you want copied
                             el.setAttribute('readonly', ''); // Make it readonly to be tamper-proof
@@ -912,19 +898,6 @@ Author: Sufiyaan Nadeem
                                 document.getSelection().addRange(selected); // Restore the original selection
                             }
                         });
-                    }
-                }, {
-                    key: 'setStatusText',
-                    value: function setStatusText(status, type) {
-                        /*This function sets the status text*/
-                        this.statusContainer.style.display = "block";
-                        this.statusText.innerText = status;
-                        if (type == "copy") {
-                            console.log("copy");
-                            this.statusContainer.style.backgroundColor = "blue";
-                        } else {
-                            this.statusContainer.style.backgroundColor = "black";
-                        }
                     }
                 }, {
                     key: 'speak',
@@ -952,51 +925,6 @@ Author: Sufiyaan Nadeem
             window.addEventListener('load', function () {
                 main = new Main();
             });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         }, {
             "deeplearn": 67,

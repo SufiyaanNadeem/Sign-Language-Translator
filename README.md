@@ -1,21 +1,26 @@
-# American-Sign-Language-Translator
-Using TensorFlow to translate Sign Language in real-time. **_Beta Release_**
+# Sign-Language-Translator
+Using TensorFlow to translate Sign Language in real-time. **_Final Release_**
+The Sign Language Translator is my final project for Grade 12 Computer Science. Its purpose is to allow users to communicate more effectively with their computers and other people. To be specific, using this program, you can sign multiple words with one gesture and copy the translated text with the click of a button. Additionally, users running this program can video call each other and talk using gestures that get converted into Computer Speech. 
 
-## To Run
+## Features
+- [x] Hand Gesture Training and Classification
+- [x] Prediction works in varying Lighting Conditions
+- [x] Retrainable Image Classes
+- [x] Translated Text can be Copied to Clipboard
+- [x] Cards that display Information about each Gesture
+- [x] Video Call functionality
+- [x] Text to Speech of translated text
+- [x] Minimal stress on memory
+- [x] Cohesive Text Styling
+- [x] Simple User Interface
+- [x] Comprehensive Commenting
+
+## To Run locally 
+Open `index.html` in Chrome.
+*NOTE:* This will disable video call functionality.
+
+## To Run on http://localhost:9966/
 ```
 npm install
 npm start
 ```
-
-## Prioritized Improvements for Final Release
-- [x] Back to Training function
-- [ ] Video Call
-- [ ] Save Models Offline
-- [x] Click Card to Train Again function
-- [x] Display Cards on Prediction Page
-- [x] Display Accuracy on Cards
-- [x] Copy Text on Translated Text Click
-- [x] Fix WebGl Context Loss
-- [x] Organize style.css file
-- [x] Cohesive Text Styling
-- [x] Comprehensive Commenting

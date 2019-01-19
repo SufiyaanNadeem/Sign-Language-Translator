@@ -731,7 +731,7 @@ class PredictionOutput {
   It copies the translated text to the user's clipboard*/
   copyTranslation() {
     this.translationHolder.addEventListener('mousedown', () => {
-      this.setStatusText("Text Copied!", "copy");
+      main.setStatusText("Text Copied!", "copy");
       const el = document.createElement('textarea'); // Create a <textarea> element
       el.value = this.translationText.innerText; // Set its value to the string that you want copied
       el.setAttribute('readonly', ''); // Make it readonly to be tamper-proof
