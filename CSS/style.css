@@ -67,6 +67,7 @@ body::-webkit-scrollbar-thumb:hover {
   from {
     width: 0
   }
+
   to {
     width: 100%
   }
@@ -75,9 +76,12 @@ body::-webkit-scrollbar-thumb:hover {
 /* The typewriter cursor effect */
 
 @keyframes blink-caret {
-  from, to {
+
+  from,
+  to {
     border-color: transparent
   }
+
   50% {
     border-color: #4d4d4d
   }
@@ -138,7 +142,6 @@ body::-webkit-scrollbar-thumb:hover {
   height: 370px;
   border: none;
   overflow: hidden;
-  
 }
 
 h5 {
@@ -229,14 +232,14 @@ button:active {
 }
 
 #nextButton {
-  top: 6%;
+  top: 30%;
   right: 2.5%;
   z-index: 2;
   position: fixed;
 }
 
 #predictButton {
-  top: 6%;
+  top: 30%;
   right: 2.5%;
   z-index: 2;
   position: fixed;
@@ -244,7 +247,7 @@ button:active {
 }
 
 .videoChatBtn {
-  top: 6%;
+  top: 30%;
   right: 2.5%;
   z-index: 2;
   position: fixed;
@@ -273,7 +276,7 @@ button:active {
   margin-top: 6px;
 }
 
-#training {
+#translatorWindow {
   width: 100%;
   height: 350px;
   display: inline-block;
@@ -291,15 +294,14 @@ button:active {
   height: 30px;
 }
 
-.done_training {
+.doneRetrain {
   background-color: white;
   border: none;
   color: black;
   font-weight: 700;
   font-size: 15px;
-  margin-top: 1px;
+  margin: 0 auto;
   border-radius: 3px;
-  vertical-align: middle;
   display: none;
 }
 
@@ -312,7 +314,7 @@ button:active {
   margin: 0px;
 }
 
-#trainingTitle {
+#titleBar {
   text-align: center;
   position: fixed;
   top: 0%;
@@ -328,7 +330,7 @@ button:active {
   border-bottom-right-radius: 15px;
 }
 
-#trainingTitle h1 {
+#titleBar h1 {
   font-size: 50px;
   font-weight: 500;
   color: black;
@@ -342,7 +344,7 @@ button:active {
   margin-top: 20px;
 }
 
-#trainingTitle h3 {
+#titleBar h3 {
   padding-top: 20px;
   margin-top: 0px;
   margin-bottom: 20px;
@@ -367,11 +369,11 @@ button:active {
   transition: .4s;
 }
 
-#trained_cards {
+#trainedCardHolder {
   display: none;
 }
 
-#train-new {
+#trainingHolder {
   display: none;
   float: left;
   width: 315px;
@@ -386,14 +388,14 @@ button:active {
   padding: 10px;
 }
 
-#initialTraining {
+#initialTrainingHolder {
   display: inline-block;
   text-align: center;
   vertical-align: middle;
   padding-right: 100px;
 }
 
-#translationContainer {
+#translationHolder {
   bottom: 0;
   color: black;
   background-color: white;
@@ -406,9 +408,13 @@ button:active {
   margin-top: 30px;
 }
 
-#translationContainer h3 {
+#translationHolder h3 {
   font-size: 20px;
   font-weight: 100;
+}
+
+#trainingDisplay {
+  margin-top: 25px;
 }
 
 img.plus_sign {

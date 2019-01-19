@@ -1,15 +1,17 @@
 <!--
-The index.html file is what is displayed on the Web Browser. This User Interface is hosted on a local host
-so that the translator can be tested live and for simplicity of use. To Learn More about how to run this code, visit
-README.md
+Index.html is the User Interface for the Sign Language Translator.
+It contains the Welcome Container, Title Bar, Status Bar, and Translator Window.
 
+To Learn More how to run this code, visit README.md
 Author: Sufiyaan Nadeem
+Fix Alerts
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!--Sets up stylesheet and script file linking. Adds favicon and site title as well-->
     <meta charset="UTF-8">
     <link rel="shortcut icon" type="image/png" href="Images/asl_logo.ico" />
     <title>ASL Translator | Sufiyaan</title>
@@ -20,9 +22,7 @@ Author: Sufiyaan Nadeem
 </head>
 
 <body>
-
-
-
+    <!--Welcome Screen-->
     <div id="welcomeContainer" class="animated">
         <div id="welcomeScreen">
             <h1>Welcome to ASL Translator</h1>
@@ -31,21 +31,27 @@ Author: Sufiyaan Nadeem
         <button class="animated flash delay-3s" id="proceedButton">Proceed</button>
     </div>
 
-    <div id="trainingTitle">
+    <!--Title bar explains the stage of the program 
+    (eg: instructions for Training, Prediction, and Video Chat)-->
+    <div id="titleBar">
         <h1 id="stage">Train Gestures</h1>
         <h3 id="steps">Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.</h3>
+        <button id="nextButton" class="animated flash delay-3s">Next</button>
+        <button id="predictButton" class="animated flash slideInRight faster">Translate</button>
+        <button id="videoChatBtn" class="videoChatBtn">Video Chat</button>
     </div>
 
-    <button id="nextButton" class="animated flash delay-3s">Next</button>
-    <button id="predictButton" class="animated flash slideInRight faster">Translate</button>
-    <button id="videoChatBtn" class="videoChatBtn">Video Chat</button>
-
+    <!--Status bar shows the status of translation-->
     <div id="status">
         <p id="status-text">Status: Not Ready</p>
     </div>
 
-    <div id="training">
-        <div id="initialTraining">
+    <!--The Translator Window displays the video of the user, various buttons, and holds
+    the training and translation screens-->
+    <div id="translatorWindow">
+
+        <!--Initial Training Holder creates the screen where users train Start and Stop Gestures-->
+        <div id="initialTrainingHolder">
             <img src="" alt="checkmark" id="checkmark_startButton" class="checkMark">
             <button id="startButton" class="trainButton ">Start Gesture</button>
             <button id="clear_startButton" class="clearButton">Clear</button>
@@ -57,40 +63,39 @@ Author: Sufiyaan Nadeem
             <img src="" alt="checkmark" id="checkmark_stopButton" class="checkMark">
         </div>
 
+        <!--Video Holder displays the video feed from the user for training and translation.
+        It also displays the Video Call feed once the user decides to do that-->
         <div id="videoHolder" class="videoContainerTrain">
             <video id="video" class="videoTrain" src='' muted autoplay playsinline></video>
-
-
             <iframe src="https://tokbox.com/embed/embed/ot-embed.js?embedId=f37957b6-0f91-4fc5-90ce-f818cc85b5bf&room=DEFAULT_ROOM&iframe=true"
                 width=650 height=370 allow="microphone; camera" id="videoCall"></iframe>
-
         </div>
 
-        <div id="train-new">
+        <!--Training Holder displays the screen where users add and train new gestures-->
+        <div id="trainingHolder">
             <h5 id="add-gesture">Add Gesture</h5>
-
             <img src="Images/plus_sign.svg" alt="Plus Sign" id="plus_sign" class="plus_sign animated">
-
             <form id="add-word" autocomplete="off">
                 <input type="text" id="new-word" placeholder="New Gesture Title">
                 <input type="submit" id="submit-word" value="Add Word &#9658;">
             </form>
-            <button id="done_training" class="done_training">Done Retraining</button>
+            <button id="doneRetrain" class="doneRetrain">Done Retraining</button>
 
-
-            <!--Next/Predict Button-->
-            <div id="trainingDisplay" class="trainButton"></div>
+            <div id="trainingDisplay"></div>
         </div>
-        <div id="translationContainer">
+
+        <!--Translation Holder is where the Gesture Card and Text that was translated is displayed.-->
+        <div id="translationHolder">
             <div id="translatedCard">
             </div>
             <h3 id="translationText">Start Signing!</h3>
         </div>
-
-    </div>
-    <div id="trained_cards">
     </div>
 
+    <!--Trained Card Holder contains all the trained gestures' cards.
+    It is outside the Training and Translation Windows because it has to be displayed on both screens-->
+    <div id="trainedCardHolder">
+    </div>
 </body>
 
 </html>
