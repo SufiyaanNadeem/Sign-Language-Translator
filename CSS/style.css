@@ -138,6 +138,7 @@ body::-webkit-scrollbar-thumb:hover {
   height: 370px;
   border: none;
   overflow: hidden;
+  left: 2.5%;
 }
 
 h5 {

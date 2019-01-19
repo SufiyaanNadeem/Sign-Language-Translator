@@ -106,7 +106,7 @@ class Main {
     // Start Translator function is called
     this.initializeTranslator();
 
-    // Load text to speech
+    // Instantiate Prediction Output
     this.predictionOutput = new PredictionOutput();
   }
 
@@ -377,7 +377,7 @@ class Main {
       this.plusImage.classList.add("rotateInLeft");
       this.doneRetrain.style.display = "none";
     });
-  };
+  }
 
   // This function starts the training process.
   initializeTraining() {
@@ -444,10 +444,11 @@ class Main {
       const exampleCount = this.knn.getClassExampleCount();
       // check if training is complete
       if (Math.max(...exampleCount) > 0) {
-        this.videoCall.style.display = "none"; // turn off video call in case it's on
         this.video.style.display = "inline-block"; // turn on video from webscam in case it's off
+
+        this.videoCall.style.display = "none"; // turn off video call in case it's on
         this.videoCallBtn.style.display = "block";
-        this.videoCallBtn.style.display = "block";
+
         this.backToTrainButton.style.display = "block";
 
         // Change style of video display
@@ -513,7 +514,7 @@ class Main {
                 if (res.classIndex == i && res.confidences[i] > confidenceThreshold && res.classIndex != this.previousPrediction) { //  && res.classIndex != 1) {
                   this.setStatusText("Status: Predicting!", "predict");
 
-                  // Send word to Text to Speech so it will display or speak out the word.
+                  // Send word to Prediction Output so it will display or speak out the word.
                   this.predictionOutput.textOutput(words[i], this.gestureCards[i], res.confidences[i] * 100);
 
                   // set previous prediction so it doesnt get called again
@@ -544,6 +545,9 @@ class Main {
     this.backToTrainButton.addEventListener('click', () => {
       main.pausePredicting();
 
+      this.stageTitle.innerText = "Continue Training";
+      this.stageInstruction.innerText = "Add Gesture Name and Train.";
+
       this.predButton.innerText = "Translate";
       this.predButton.style.display = "block";
       this.backToTrainButton.style.display = "none";
@@ -561,9 +565,6 @@ class Main {
       this.trainingContainer.style.display = "block";
       this.trainedCardsHolder.style.marginTop = "0px";
       this.trainedCardsHolder.style.display = "block";
-
-      this.stageTitle.innerText = "Train Gestures";
-      this.stageInstruction.innerText = "Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.";
     });
   }
 
@@ -579,6 +580,9 @@ class Main {
   createVideoCallBtn() {
     // Display video call feed instead of normal webcam feed when video call btn is clicked
     videoCallBtn.addEventListener('click', () => {
+      this.stageTitle.innerText = "Video Call";
+      this.stageInstruction.innerText = "Translate Gestures to talk to people on Video Call";
+
       this.video.style.display = "none";
       this.videoContainer.style.borderStyle = "none";
       this.videoContainer.style.overflow = "hidden";
@@ -710,7 +714,7 @@ class PredictionOutput {
     this.translatedCard.appendChild(clonedCard);
 
     // If its not video call mode, speak out the user's word
-    if (!this.videoCallMode && word != "start" && word != "stop") {
+    if (word != "start" && word != "stop") {
       this.speak(word);
     }
   }
