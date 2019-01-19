@@ -81,7 +81,7 @@ class Main {
     this.translationText = document.getElementById("translationText");
     this.translatedCard = document.getElementById("translatedCard");
 
-    this.initialTrainingHolder = document.getElementById('initialTrainingHolderHolder');
+    this.initialTrainingHolder = document.getElementById('initialTrainingHolder');
 
     this.videoContainer = document.getElementById("videoHolder");
     this.video = document.getElementById("video");
@@ -92,12 +92,12 @@ class Main {
     this.addWordForm = document.getElementById("add-word");
     this.newWordInput = document.getElementById("new-word");
     this.doneRetrain = document.getElementById("doneRetrain");
-    this.trainingDisplay = document.getElementById("trainingDisplay");
+    this.trainingCommands = document.getElementById("trainingCommands");
 
     this.videoCallBtn = document.getElementById("videoCallBtn");
     this.videoCall = document.getElementById("videoCall");
 
-    this.trainedCards = document.getElementById("trainedCardHolder");
+    this.trainedCardsHolder = document.getElementById("trainedCardsHolder");
 
     // Start Translator function is called
     this.initializeTranslator();
@@ -212,7 +212,7 @@ class Main {
     var gestureName = document.createElement("h5");
     gestureName.innerText = gestName;
     gestureCard.appendChild(gestureName);
-    this.trainingDisplay.appendChild(gestureCard);
+    this.trainedCardsHolder.appendChild(gestureCard);
 
     exampleCountDisplay.innerText = " 0 examples";
     checkMark.src = 'Images\\loader.gif';
@@ -224,10 +224,8 @@ class Main {
   /*This function sets up the custom gesture training UI.*/
   setupTrainingUI() {
     const exampleCount = this.knn.getClassExampleCount();
-
     // check if training is complete
     if (Math.max(...exampleCount) > 0) {
-
       // if start gesture has not been trained
       if (exampleCount[0] == 0) {
         alert('You haven\'t added examples for the wake word');
@@ -245,11 +243,11 @@ class Main {
 
       // Add the Custom Gesture Training UI
       this.trainingContainer.style.display = "block";
-      this.trainedCards.style.display = "block";
+      this.trainedCardsHolder.style.display = "block";
 
       // Add Gesture on Submission of new gesture form
       this.addWordForm.addEventListener('submit', (e) => {
-        this.trainingDisplay.innerHTML = "";
+        this.trainingCommands.innerHTML = "";
 
         e.preventDefault(); // preventing default submission action
         var word = this.newWordInput.value.trim(); // returns new word without whitespace
@@ -288,12 +286,12 @@ class Main {
     var trainBtn = document.createElement('button');
     trainBtn.className = "trainBtn";
     trainBtn.innerText = "Train";
-    this.trainingDisplay.appendChild(trainBtn);
+    this.trainingCommands.appendChild(trainBtn);
 
     var clearBtn = document.createElement('button');
     clearBtn.className = "clearButton";
     clearBtn.innerText = "Clear";
-    this.trainingDisplay.appendChild(clearBtn);
+    this.trainingCommands.appendChild(clearBtn);
 
     // Change training class from none to specified class if training button is pressed
     trainBtn.addEventListener('mousedown', () => {
@@ -315,11 +313,11 @@ class Main {
     // Create elements to display training information for the user
     var exampleCountDisplay = document.createElement('h3');
     exampleCountDisplay.style.color = "black";
-    this.trainingDisplay.appendChild(exampleCountDisplay);
+    this.trainingCommands.appendChild(exampleCountDisplay);
 
     var checkMark = document.createElement('img');
     checkMark.className = "checkMark";
-    this.trainingDisplay.appendChild(checkMark);
+    this.trainingCommands.appendChild(checkMark);
 
     //Create Gesture Card
     var gestureCard = document.createElement("div");
@@ -329,7 +327,7 @@ class Main {
     var gestureName = document.createElement("h5");
     gestureName.innerText = gestName;
     gestureCard.appendChild(gestureName);
-    this.trainingDisplay.appendChild(gestureCard);
+    this.trainedCardsHolder.appendChild(gestureCard);
 
     exampleCountDisplay.innerText = " 0 examples";
     checkMark.src = 'Images\\loader.gif';
@@ -349,11 +347,11 @@ class Main {
 
         // Display done retraining button and the training buttons for the specific gesture
         this.doneRetrain.style.display = "block";
-        this.trainingDisplay.innerHTML = "";
-        this.trainingDisplay.appendChild(trainBtn);
-        this.trainingDisplay.appendChild(clearBtn);
-        this.trainingDisplay.appendChild(exampleCountDisplay);
-        this.trainingDisplay.appendChild(checkMark);
+        this.trainingCommands.innerHTML = "";
+        this.trainingCommands.appendChild(trainBtn);
+        this.trainingCommands.appendChild(clearBtn);
+        this.trainingCommands.appendChild(exampleCountDisplay);
+        this.trainingCommands.appendChild(checkMark);
         gestureCard.style.marginTop = "-10px";
       }
       // if gesture card is pressed again, change the add gesture card back to add gesture mode instead of retrain mode
@@ -362,7 +360,7 @@ class Main {
         this.addWordForm.style.display = "block";
         gestureCard.style.marginTop = "17px";
 
-        this.trainingDisplay.innerHTML = "";
+        this.trainingCommands.innerHTML = "";
         this.addWordForm.style.display = "block";
         this.doneRetrain.style.display = "none";
         plusImage.src = "Images/plus_sign.svg";
@@ -376,7 +374,7 @@ class Main {
       this.addWordForm.style.display = "block";
       gestureCard.style.marginTop = "17px";
 
-      this.trainingDisplay.innerHTML = "";
+      this.trainingCommands.innerHTML = "";
       this.addWordForm.style.display = "block";
       plusImage.src = "Images/plus_sign.svg";
       plusImage.classList.add("rotateInLeft");
@@ -384,7 +382,7 @@ class Main {
     });
   };
 
-  /*This function starts the training process.*/
+  // This function starts the training process.
   initializeTraining() {
     if (this.timer) {
       this.stopTraining();
@@ -401,10 +399,11 @@ class Main {
     this.timer = requestAnimationFrame(this.train.bind(this));
   }
 
-  /*This function adds examples for the particular gesture to the kNN model*/
+  // This function adds examples for the particular gesture to the kNN model
   train() {
     // If next button is pressed, stop training
     this.nextButton.addEventListener('click', () => {
+      const exampleCount = this.knn.getClassExampleCount();
       if (Math.max(...exampleCount) > 0) {
         this.stopTraining();
       }
@@ -452,35 +451,11 @@ class Main {
     this.timer = requestAnimationFrame(this.train.bind(this));
   }
 
-  /*This function stops the training process*/
-  stopTraining() {
-    this.video.pause();
-    cancelAnimationFrame(this.timer);
-    console.log("Knn for start: " + this.knn.getClassExampleCount()[0]);
-    this.previousKnn = this.knn; // saves current knn model so it can be used later
-  }
-
-  /*This function creates the displays the button that start video call.*/
-  createVideoCallBtn() {
-    videoCallBtn.style.display = "block";
-
-    // Display video call feed instead of normal webcam feed when video call btn is clicked
-    videoCallBtn.addEventListener('click', () => {
-      this.video.style.display = "none";
-      videoContainer.style.borderStyle = "none";
-      videoContainer.style.overflow = "hidden";
-      videoContainer.style.width = "630px";
-      videoContainer.style.height = "350px";
-      videoCall.style.display = "block";
-    })
-  }
-
   /*This function creates the button that goes to the Translate Page. It also initializes the UI 
   of the translate page and starts or stops prediction on click.*/
   createTranslateBtn() {
-
     this.predButton.style.display = "block";
-    createVideoCallBtn(); // create video call button that displays on translate page
+    this.createVideoCallBtn(); // create video call button that displays on translate page
 
     this.predButton.addEventListener('click', () => {
       // if in translate button is pressed, change the styling of video display and start prediction
@@ -489,6 +464,7 @@ class Main {
         // check if training is complete
         if (Math.max(...exampleCount) > 0) {
           this.videoCall.style.display = "none"; // turn off video call in case it's on
+          videoCallBtn.style.display = "block";
 
           // Change style of video display
           this.video.className = "videoPredict";
@@ -504,7 +480,7 @@ class Main {
 
           // Remove training UI
           this.trainingContainer.style.display = "none";
-          this.trainedCards.style.marginTop = "130px";
+          this.trainedCardsHolder.style.marginTop = "130px";
 
           // Display translation holder that contains translated text
           this.translationHolder.style.display = "block";
@@ -533,9 +509,9 @@ class Main {
         this.statusContainer.style.display = "none";
 
         // Show elements from training mode
-        trainingContainer.style.display = "block";
-        trainedCards.style.marginTop = "0px";
-        trainedCards.style.display = "block";
+        this.trainingContainer.style.display = "block";
+        this.trainedCardsHolder.style.marginTop = "0px";
+        this.trainedCardsHolder.style.display = "block";
 
         this.stageTitle.innerText = "Train Gestures";
         this.stageInstruction.innerText = "Train about 30 samples of your Start Gesture and 30 for your idle, Stop Gesture.";
@@ -583,7 +559,7 @@ class Main {
                   this.setStatusText("Status: Predicting!", "predict");
 
                   // Send word to Text to Speech so it will display or speak out the word.
-                  this.predictionOutput.textOutput(words[i]);
+                  this.predictionOutput.textOutput(words[i], this.gestureCards[i]);
 
                   // set previous prediction so it doesnt get called again
                   this.previousPrediction = res.classIndex;
@@ -608,6 +584,26 @@ class Main {
     this.previousKnn = this.knn;
   }
 
+  /*This function stops the training process*/
+  stopTraining() {
+    this.video.pause();
+    cancelAnimationFrame(this.timer);
+    console.log("Knn for start: " + this.knn.getClassExampleCount()[0]);
+    this.previousKnn = this.knn; // saves current knn model so it can be used later
+  }
+
+  /*This function displays the button that start video call.*/
+  createVideoCallBtn() {
+    // Display video call feed instead of normal webcam feed when video call btn is clicked
+    videoCallBtn.addEventListener('click', () => {
+      this.video.style.display = "none";
+      videoContainer.style.borderStyle = "none";
+      videoContainer.style.overflow = "hidden";
+      videoContainer.style.width = "630px";
+      videoContainer.style.height = "350px";
+      videoCall.style.display = "block";
+    })
+  }
   /*This function sets the status text*/
   setStatusText(status, type) { //make default type thing
     this.statusContainer.style.display = "block";
@@ -632,8 +628,13 @@ class PredictionOutput {
     this.pitch = 1.0;
     this.rate = 0.9;
 
+    this.statusContainer = document.getElementById("status");
+    this.statusText = document.getElementById("status-text");
+
     this.translationHolder = document.getElementById("translationHolder");
     this.translationText = document.getElementById("translationText");
+    this.translatedCard = document.getElementById("translatedCard");
+    this.trainedCardsHolder = document.getElementById("trainedCardsHolder");
 
     this.selectedVoice = 48; // this is Google-US en. Can set voice and language of choice
 
@@ -645,7 +646,7 @@ class PredictionOutput {
     };
 
     //Set up copy translation event listener
-    copyTranslation();
+    this.copyTranslation();
   }
 
   // Checks if speech synthesis is possible and if selected voice is available
@@ -658,13 +659,11 @@ class PredictionOutput {
 
     if (this.voices.indexOf(this.selectedVoice) > 0) {
       console.log(this.voices[this.selectedVoice].name + ':' + this.voices[this.selectedVoice].lang);
-    } else {
-      alert("Selected voice for speech did not load or does not exist.\nCheck Internet Connection")
     }
   }
 
   /*This function outputs the word using text and gesture cards*/
-  textOutput(word) {
+  textOutput(word, gestureCard) {
     // If the word is start, clear translated text content
     if (word == 'start') {
       this.clearPara();
@@ -699,10 +698,23 @@ class PredictionOutput {
       this.translationText.innerText += ' ' + word;
     }
 
-    // Show the gesture card corresponding to the predicted word
-    var gestCard = _.clone(this.gestureCards[i]); // the gesture card is cloned so the original one is not altered
-    this.translatedCard.innerHTML = "";
-    this.translatedCard.appendChild(gestCard);
+    //Clone Gesture Card
+    this.translatedCard.innerHTML = " ";
+    var clonedCard = document.createElement("div");
+    clonedCard.className = "trained-gestures";
+
+    var gestName = gestureCard.childNodes[0].innerText;
+    var gestureName = document.createElement("h5");
+    gestureName.innerText = gestName;
+    clonedCard.appendChild(gestureName);
+
+    var gestureImg = document.createElement("canvas");
+    gestureImg.className = "trained_image";
+    gestureImg.getContext('2d').drawImage(gestureCard.childNodes[1], 0, 0, 400, 180);
+    clonedCard.appendChild(gestureImg);
+    //clonedCard.appendChild(gestureImg);
+
+    this.translatedCard.appendChild(clonedCard);
 
     // If its not video call mode, speak out the user's word
     if (!this.videoCallMode) {
@@ -710,11 +722,12 @@ class PredictionOutput {
     }
   }
 
-  /*This functions clears translation text and sets the previous predicted words to null*/
+  /*This functions clears translation text and cards. Sets the previous predicted words to null*/
   clearPara() {
     this.translationText.innerText = '';
     main.previousPrediction = -1;
     this.currentPredictedWords = []; // empty words in this query
+    this.translatedCard.innerHTML = " ";
   }
 
   /*The function below is adapted from https://stackoverflow.com/questions/45071353/javascript-copy-text-string-on-click/53977796#53977796

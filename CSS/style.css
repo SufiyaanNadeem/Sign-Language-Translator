@@ -365,7 +365,7 @@ button:active {
   transition: .4s;
 }
 
-#trainedCardHolder {
+#trainedCardsHolder {
   display: none;
 }
 
@@ -409,7 +409,7 @@ button:active {
   font-weight: 100;
 }
 
-#trainingDisplay {
+#trainingCommands {
   margin-top: 25px;
 }
 
