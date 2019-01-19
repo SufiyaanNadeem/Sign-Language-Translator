@@ -67,7 +67,6 @@ body::-webkit-scrollbar-thumb:hover {
   from {
     width: 0
   }
-
   to {
     width: 100%
   }
@@ -76,12 +75,9 @@ body::-webkit-scrollbar-thumb:hover {
 /* The typewriter cursor effect */
 
 @keyframes blink-caret {
-
-  from,
-  to {
+  from, to {
     border-color: transparent
   }
-
   50% {
     border-color: #4d4d4d
   }
@@ -246,7 +242,7 @@ button:active {
   display: none;
 }
 
-.videoChatBtn {
+.videoCallBtn {
   top: 30%;
   right: 2.5%;
   z-index: 2;
@@ -436,7 +432,6 @@ img.trained_image {
   display: block;
   padding: 3px 0px;
   margin: 0 auto;
-  /*border: 1px solid orange;*/
 }
 
 canvas.trained_image {
@@ -445,7 +440,6 @@ canvas.trained_image {
   display: block;
   padding: 3px 0px;
   margin: 0 auto;
-  /*border: 1px solid orange;*/
 }
 
 label {

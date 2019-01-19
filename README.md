@@ -9,7 +9,7 @@ npm start
 
 ## Prioritized Improvements for Final Release
 - [x] Back to Training function
-- [ ] Video Chat + Real-time translation
+- [ ] Video Call
 - [ ] Save Models Offline
 - [x] Click Card to Train Again function
 - [x] Display Cards on Prediction Page
@@ -18,4 +18,4 @@ npm start
 - [ ] Fix WebGl Context Loss
 - [x] Organize style.css file
 - [x] Cohesive Text Styling
-- [ ] Comprehensive Commenting ---
+- [x] Comprehensive Commenting
