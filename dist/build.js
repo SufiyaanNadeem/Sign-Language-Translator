@@ -615,29 +615,30 @@ Author: Sufiyaan Nadeem
                     key: 'predict',
                     value: function predict() {
                         /*This function predicts the class of the gesture and returns the predicted text if its above a set threshold.*/
+                        var _this8=this;
 
-                        this.now = Date.now();
-                        this.elapsed = this.now - this.then;
+                        _this8.now = Date.now();
+                        _this8.elapsed = _this8.now - _this8.then;
 
-                        if (this.elapsed > this.fpsInterval) {
-                            this.then = this.now - this.elapsed % this.fpsInterval;
-                            if (this.videoPlaying) {
-                                const exampleCount = this.knn.getClassExampleCount();
-                                const image = dl.fromPixels(this.video);
+                        if (_this8.elapsed > this.fpsInterval) {
+                            _this8.then = _this8.now - _this8.elapsed % _this8.fpsInterval;
+                            if (_this8.videoPlaying) {
+                                const exampleCount = _this8.knn.getClassExampleCount();
+                                const image = dl.fromPixels(_this8.video);
 
                                 if (Math.max(...exampleCount) > 0) {
                                     this.knn.predictClass(image).then(function (res) {
                                         for (let i = 0; i < words.length; i++) {
                                             /*if gesture matches this word & is above threshold & isn't same as prev prediction
                                             and is not stop gesture, return that word to the user*/
-                                            if (res.classIndex == i && res.confidences[i] > confidenceThreshold && res.classIndex != this.previousPrediction) { //  && res.classIndex != 1) {
-                                                this.setStatusText("Status: Predicting!", "predict");
+                                            if (res.classIndex == i && res.confidences[i] > confidenceThreshold && res.classIndex != _this8.previousPrediction) { //  && res.classIndex != 1) {
+                                                _this8.setStatusText("Status: Predicting!", "predict");
 
                                                 // Send word to Prediction Output so it will display or speak out the word.
-                                                this.predictionOutput.textOutput(words[i], this.gestureCards[i], res.confidences[i] * 100);
+                                                _this8.predictionOutput.textOutput(words[i], _this8.gestureCards[i], res.confidences[i] * 100);
 
                                                 // set previous prediction so it doesnt get called again
-                                                this.previousPrediction = res.classIndex;
+                                                _this8.previousPrediction = res.classIndex;
                                             }
                                         }
                                     }).then(function () {
